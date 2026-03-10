@@ -1,0 +1,55 @@
+.banner-container {
+  width: 100%;
+  height: 400px; /* Bạn có thể tăng giảm chiều cao này cho vừa màn hình */
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.banner-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.banner-image.active {
+  opacity: 1;
+}
+
+/* Style cho cục đếm số banner */
+.banner-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
+}
+
+.indicator-number {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.indicator-track {
+  display: flex;
+  gap: 5px;
+}
+
+.indicator-bar {
+  width: 30px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.4); /* Vạch mờ */
+}
+
+.indicator-bar.active {
+  background-color: #e60028; /* Vạch đỏ đậm của tấm ảnh đang chạy */
+}

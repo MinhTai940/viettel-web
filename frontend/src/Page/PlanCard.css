@@ -1,6 +1,8 @@
 /* src/Page/PlanCard.css */
+
 .plan-card {
-  width: 280px;
+  width: calc(25% - 20px);
+  box-sizing: border-box;
   padding: 45px 24px 24px 24px;
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(220, 20, 60, 0.1); /* Bóng đổ màu đỏ nhẹ */
@@ -9,6 +11,11 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: white;
   position: relative;
+  
+  /* CỘT CO GIÃN: Giúp các thẻ cao bằng nhau */
+  display: flex;
+  flex-direction: column; 
+  height: 100%; 
 }
 
 .plan-header {
@@ -17,40 +24,79 @@
 
 .plan-name {
   position: absolute;
-  top: -20px; /* Đẩy viên thuốc trồi lên khỏi cạnh trên 20px */
+  top: -20px; 
   left: 50%;
-  transform: translateX(-50%); /* Canh vào chính giữa */
+  transform: translateX(-50%); 
 
-  font-size: 24px; /* Chữ bự hơn */
+  font-size: 24px; 
   font-weight: 900;
-  font-family: 'Arial Black', sans-serif; /* Dùng font này cho nét chữ dày và vuông vức giống ảnh */
+  font-family: 'Arial Black', sans-serif; 
   
   background-color: #fff;
   padding: 8px 30px;
-  border-radius: 30px; /* Bo tròn 4 góc thành hình viên thuốc */
-  border: 1px solid #eef0f4; /* Viền mỏng */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06); /* Đổ bóng nhẹ cho nó nổi bần bật lên */
+  border-radius: 30px; 
+  border: 1px solid #eef0f4; 
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06); 
   color: #333;
 }
 
+/* ========================================= */
+/* KHU VỰC DATA CHÍNH (Chữ 4GB, 6GB...)      */
+/* ========================================= */
 .plan-data {
   display: flex;
-  align-items: baseline; /* Canh đều phần chân của các chữ */
+  align-items: baseline; 
   justify-content: center;
-  gap: 2px; /* Khoảng cách giữa 4GB và /NGÀY */
+  gap: 2px; 
   margin-bottom: 20px;
 }
 
 .data-number {
   font-size: 56px;
   font-weight: 900;
-  color: #e5002b; /* Màu đỏ */
+  color: #e5002b; 
 }
 
 .data-unit {
   font-size: 18px;
   font-weight: bold;
   color: #333;
+}
+
+.data-duration {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* ========================================= */
+/* DÀNH CHO GÓI MXH (Chữ MIỄN PHÍ đỏ to)     */
+/* ========================================= */
+.plan-data-special {
+  margin-bottom: 20px;
+}
+.data-number-free {
+  font-size: 32px;
+  font-weight: 900;
+  color: #e5002b;
+  text-transform: uppercase;
+}
+.data-subtext {
+  font-size: 18px;
+  color: #333;
+}
+
+/* ========================================= */
+/* KHU VỰC GIỮA (Chứa Icon, đẩy giá xuống)   */
+/* ========================================= */
+.plan-middle-section {
+  min-height: 80px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Lực hút ma thuật: Tự động lấp đầy khoảng trống dư thừa */
+  margin-bottom: 20px;
 }
 
 .plan-free-info p {
@@ -64,15 +110,16 @@
   justify-content: center;
 }
 
-/* Khung viền bo tròn bọc các icon */
 .plan-icons-wrapper {
   display: flex;
   align-items: center;
-  gap: 8px; /* Tách các icon */
+  gap: 8px; 
   border: 1px solid #e0e0e0;
   border-radius: 30px;
   padding: 8px 16px;
   background-color: white;
+  flex-wrap: wrap; /* BẮT BUỘC PHẢI CÓ: Ép icon rớt dòng nếu quá nhiều */
+  justify-content: center;
 }
 
 .icon {
@@ -80,8 +127,12 @@
   height: 24px;
 }
 
+/* ========================================= */
+/* KHU VỰC GIÁ TIỀN & NÚT BẤM                */
+/* ========================================= */
 .plan-price {
   margin-bottom: 24px;
+  margin-top: auto; /* Lò xo đẩy phần giá và nút dính chặt xuống đáy */
 }
 
 .plan-price .price-number {

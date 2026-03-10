@@ -1,0 +1,100 @@
+/* src/DashBoard/Footer.css */
+
+.footer-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  margin-top: 50px;
+}
+
+/* ================= TẦNG TRÊN (MÀU TRẮNG) ================= */
+.footer-top {
+  background-color: #f9f9f9; /* Hơi xám nhẹ cho tách biệt */
+  padding: 50px 0;
+  display: flex;
+  justify-content: center; /* Gom vào giữa */
+  gap: 100px; /* Thu hẹp khoảng cách giữa 2 cột cho đẹp */
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 300px; /* Ép bề rộng tối đa của 1 cột để kiểm soát lay-out */
+}
+
+/* Cột 1: Đơn vị cung cấp - Cần canh giữa */
+.center-col {
+  align-items: center;
+  text-align: center;
+}
+
+/* Cột 2: Liên hệ - Cần dạt về bên trái */
+.contact-col {
+  align-items: flex-start;
+}
+
+/* Chữ cách điệu: Tiêu đề bự hơn, đậm hơn */
+.footer-title {
+  font-size: 18px; 
+  font-weight: 700; 
+  color: #333; 
+  margin-bottom: 25px;
+  margin-top: 0;
+}
+
+/* Fix title cột 2 để nó bằng hàng với title cột 1 */
+.contact-title {
+    margin-top: 0;
+}
+
+/* Logo bự hơn */
+.footer-logo {
+  height: 100px; /* SỬA Ở ĐÂY: Logo to chà bá */
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+/* Chữ cách điệu: Slogan nhìn chất hơn */
+.footer-slogan {
+  font-size: 16px; 
+  font-weight: 600; 
+  color: #444; 
+  margin: 0;
+}
+
+/* XỬ LÝ LỆCH HÀNG Ở ĐÂY NÈ */
+.contact-item {
+  display: flex;
+  align-items: center; /* Canh icon với chữ theo chiều dọc */
+  justify-content: flex-start;
+  gap: 15px; /* Khoảng cách icon và chữ */
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* BÍ QUYẾT TRỊ BỆNH LỆCH HÀNG: Set cứng width cho icon */
+.contact-icon-container {
+  width: 20px; /* Ép icon vào 1 cái ô cố định, giúp text tự động xếp thẳng hàng */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e5002b; /* Cho icon màu đỏ cho chất */
+}
+
+.contact-icon-container svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ================= TẦNG DƯỚI (MÀU ĐỎ) ================= */
+.footer-bottom {
+  background-color: #e5002b; 
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 14px;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
