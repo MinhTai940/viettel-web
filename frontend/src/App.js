@@ -1,21 +1,33 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import AdminLogin from "./admin/Login";
+import Dashboard from "./admin/Dashboard";
+import Packages from "./admin/Packages";
+import PackageList from "./admin/PackageList";
+import AdminLayout from "./admin/AdminLayout"
+
 import DashBoard from "./DashBoard/DashBoard";
-import PlanDetail from "./Page/PlanDetail";
+
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <Routes>
-          {/* Trang chính */}
-          <Route path="/" element={<DashBoard />} />
+      <Routes>
 
-          {/* Trang chi tiết gói cước */}
-          <Route path="/plan/:id" element={<PlanDetail />} />
-        </Routes>
-      </div>
+        <Route path="/" element={<DashBoard />} />
+        <Route path="/admin" element={<AdminLogin />} />
+
+        <Route path="/admin" element={<AdminLayout />}>
+
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+
+          <Route path="/admin/packages" element={<Packages />} />
+
+          <Route path="/admin/packages/list" element={<PackageList />} />
+
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

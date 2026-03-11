@@ -1,173 +1,156 @@
 /* src/Page/PlanCard.css */
 
 .plan-card {
-  width: calc(25% - 20px);
-  box-sizing: border-box;
-  padding: 45px 24px 24px 24px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(220, 20, 60, 0.1); /* Bóng đổ màu đỏ nhẹ */
-  border: 1px solid #ffe6eb; /* Viền mờ */
+  width: 250px;
+  padding: 40px 20px 20px;
+
+  border-radius: 18px;
+  border: 1px solid #ffe6eb;
+
+  box-shadow: 0 4px 15px rgba(220, 20, 60, 0.08);
+
+  background: white;
+
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: white;
+
   position: relative;
-  
-  /* CỘT CO GIÃN: Giúp các thẻ cao bằng nhau */
+
   display: flex;
-  flex-direction: column; 
-  height: 100%; 
+  flex-direction: column;
+
+  gap: 14px;
 }
 
-.plan-header {
-  margin-bottom: 20px;
-}
+/* HEADER */
 
 .plan-name {
   position: absolute;
-  top: -20px; 
-  left: 50%;
-  transform: translateX(-50%); 
 
-  font-size: 24px; 
+  top: -18px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: white;
+
+  padding: 6px 24px;
+
+  border-radius: 30px;
+
+  border: 1px solid #eef0f4;
+
+  font-size: 20px;
   font-weight: 900;
-  font-family: 'Arial Black', sans-serif; 
-  
-  background-color: #fff;
-  padding: 8px 30px;
-  border-radius: 30px; 
-  border: 1px solid #eef0f4; 
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06); 
-  color: #333;
 }
 
-/* ========================================= */
-/* KHU VỰC DATA CHÍNH (Chữ 4GB, 6GB...)      */
-/* ========================================= */
+/* DATA */
+
 .plan-data {
   display: flex;
-  align-items: baseline; 
+
+  align-items: baseline;
   justify-content: center;
-  gap: 2px; 
-  margin-bottom: 20px;
+
+  gap: 4px;
 }
 
 .data-number {
-  font-size: 56px;
+  font-size: 44px;
   font-weight: 900;
-  color: #e5002b; 
-}
 
-.data-unit {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  color: #e5002b;
 }
 
 .data-duration {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
 }
 
-/* ========================================= */
-/* DÀNH CHO GÓI MXH (Chữ MIỄN PHÍ đỏ to)     */
-/* ========================================= */
-.plan-data-special {
-  margin-bottom: 20px;
-}
-.data-number-free {
-  font-size: 32px;
-  font-weight: 900;
-  color: #e5002b;
-  text-transform: uppercase;
-}
-.data-subtext {
-  font-size: 18px;
-  color: #333;
-}
+/* ICON */
 
-/* ========================================= */
-/* KHU VỰC GIỮA (Chứa Icon, đẩy giá xuống)   */
-/* ========================================= */
 .plan-middle-section {
-  min-height: 80px; 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
-  flex-grow: 1; /* Lực hút ma thuật: Tự động lấp đầy khoảng trống dư thừa */
-  margin-bottom: 20px;
+
+  gap: 6px;
 }
 
 .plan-free-info p {
   font-size: 14px;
   color: #666;
-  margin-bottom: 8px;
-}
-
-.plan-icons-container {
-  display: flex;
-  justify-content: center;
 }
 
 .plan-icons-wrapper {
   display: flex;
-  align-items: center;
-  gap: 8px; 
+
+  gap: 8px;
+
   border: 1px solid #e0e0e0;
+
   border-radius: 30px;
-  padding: 8px 16px;
-  background-color: white;
-  flex-wrap: wrap; /* BẮT BUỘC PHẢI CÓ: Ép icon rớt dòng nếu quá nhiều */
-  justify-content: center;
+
+  padding: 6px 12px;
+
+  background: white;
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
-/* ========================================= */
-/* KHU VỰC GIÁ TIỀN & NÚT BẤM                */
-/* ========================================= */
+/* PRICE */
+
 .plan-price {
-  margin-bottom: 24px;
-  margin-top: auto; /* Lò xo đẩy phần giá và nút dính chặt xuống đáy */
+  margin-top: 6px;
 }
 
-.plan-price .price-number {
+.price-number {
   font-size: 20px;
   font-weight: 900;
 }
 
-.plan-price .price-unit {
+.price-unit {
   font-size: 16px;
   font-weight: bold;
-  color: #333;
 }
+
+/* BUTTON */
 
 .plan-actions {
   display: flex;
   justify-content: center;
-  gap: 12px;
+
+  gap: 10px;
+
+  margin-top: 10px;
 }
 
-.btn-register, .btn-detail {
-  padding: 12px 24px;
-  border-radius: 24px;
-  font-weight: bold;
-  cursor: pointer;
+.btn-register,
+.btn-detail {
+
+  padding: 10px 20px;
+
+  border-radius: 22px;
+
   font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
 }
 
 .btn-register {
-  background-color: #e5002b;
+  background: #e5002b;
   color: white;
   border: none;
 }
 
 .btn-detail {
-  background-color: white;
+  background: white;
   color: #e5002b;
+
   border: 1px solid #e5002b;
 }

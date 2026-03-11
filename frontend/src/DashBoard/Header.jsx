@@ -1,62 +1,117 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
-import viettelLogo from '../assets/viettel-logo.jpg'; 
+import viettelLogo from '../assets/viettel-logo.jpg';
+import API from '../services/api';
 
 const Header = () => {
-  // Hàm cuộn mượt mà đến đúng ID gói cước
-  const scrollToSection = (e, id) => {
-    e.preventDefault(); // Chặn việc nó nhảy trang 
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await API.get("/categories");
+      setCategories(res.data);
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  // Hàm cuộn mượt lên đầu trang khi bấm Trang chủ / Logo
+  // scroll tới section
+  const scrollToSection = (e, id) => {
+    e.preventDefault();
+
+    const section = document.getElementById(id);
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  };
+
+  // scroll lên đầu trang
   const scrollToTop = (e) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   };
 
   return (
     <header className="header">
-      
-      {/* CỘT TRÁI: LOGO */}
-      <div className="logo-container" style={{ cursor: 'pointer' }} onClick={scrollToTop}>
+
+      {/* LOGO */}
+      <div
+        className="logo-container"
+        style={{ cursor: 'pointer' }}
+        onClick={scrollToTop}
+      >
         <img src={viettelLogo} alt="Viettel Logo" className="logo-img" />
       </div>
 
-      {/* CỘT GIỮA: THANH MENU */}
+      {/* MENU */}
       <nav className="nav-menu">
         <ul className="nav-links">
-          
-          {/* Nút Trang chủ */}
+
+          {/* Trang chủ */}
           <li>
             <a href="#" onClick={scrollToTop}>Trang chủ</a>
           </li>
 
-          {/* Cụm Dropdown Gói Cước */}
+          {/* Dropdown gói cước */}
           <li className="dropdown">
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '5px' }} onClick={(e) => e.preventDefault()}>
+
+            <a
+              href="#"
+              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              onClick={(e) => e.preventDefault()}
+            >
               Gói cước
-              {/* Icon mũi tên chỉ xuống */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+
+              <svg width="14" height="14" viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
+
             </a>
-            
-            {/* Menu con thả xuống (CSS của mày tự động hiện khi hover) */}
+
+            {/* MENU TỰ ĐỘNG TỪ DATABASE */}
+
             <ul className="dropdown-menu">
-              <li>
-                <a href="#goi-thang" onClick={(e) => scrollToSection(e, 'goi-thang')}>Gói cước tháng</a>
-              </li>
-              <li>
-                <a href="#goi-ngay" onClick={(e) => scrollToSection(e, 'goi-ngay')}>Gói cước ngày</a>
-              </li>
-              <li>
-                <a href="#goi-khac" onClick={(e) => scrollToSection(e, 'goi-khac')}>Gói cước khác</a>
-              </li>
+
+              {categories.map((cat) => {
+
+                // tạo id section từ name
+                const sectionId = cat.name
+                  .toLowerCase()
+                  .replace(/\s+/g, '-');
+
+                return (
+                  <li key={cat._id}>
+                    <a
+                      href={`#${sectionId}`}
+                      onClick={(e) => scrollToSection(e, sectionId)}
+                    >
+                      {cat.name}
+                    </a>
+                  </li>
+                )
+
+              })}
+
             </ul>
+
           </li>
 
         </ul>
