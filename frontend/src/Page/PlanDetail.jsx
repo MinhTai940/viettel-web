@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { monthlyPlans } from "./monthlyPlans";
+import { monthlyPlans } from "./monthlyData4g.js";
 import "./PlanDetail.css";
 
 function PlanDetail() {
