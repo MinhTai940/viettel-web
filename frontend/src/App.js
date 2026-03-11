@@ -1,37 +1,46 @@
-import logo from './logo.svg';
 import './App.css';
 
-import PlanCard from './Page/PlanCard';
-import { monthlyPlans } from './Page/monthlyPlans';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import AdminLogin from "./admin/Login";
+import Dashboard from "./admin/Dashboard";
+import Packages from "./admin/Packages";
+import PackageList from "./admin/PackageList";
+import AdminLayout from "./admin/AdminLayout";
+
+import Home from "./Page/Home";
 
 function App() {
+
   return (
-      <div style={{ 
-        display: 'flex', 
-        gap: '60px 20px', 
-        padding: '40px', 
-        backgroundColor: '#f9f9f9', 
-        minHeight: '100vh', 
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start', /* SỬA Ở ĐÂY: Đổi center thành flex-start để ép các box dạt sang trái */
-        maxWidth: '1400px',           /* THÊM VÀO: Giới hạn chiều rộng tổng để chứa vừa khít 4 box/hàng */
-        margin: '0 auto'              /* THÊM VÀO: Canh giữa toàn bộ cụm danh sách trên màn hình lớn */
-      }}> 
-      {/* Vòng lặp lấy dữ liệu từ monthlyPlans mới */}
-      {monthlyPlans.map((plan) => (
-        <PlanCard 
-          key={plan.id}
-          planName={plan.planName}
-          dataValue={plan.dataValue}
-          dataUnit={plan.dataUnit}
-          price={plan.price}
-          hasCallIcon={plan.hasCallIcon}
-          hasTv360Icon={plan.hasTv360Icon}
-          hasCloudIcon={plan.hasCloudIcon}
-        />
-      ))}
-      
-    </div>
+
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* Trang Home người dùng */}
+        <Route path="/" element={<Home />} />
+
+        {/* Trang login admin */}
+        <Route path="/admin" element={<AdminLogin />} />
+
+        {/* Layout Admin */}
+        <Route path="/admin" element={<AdminLayout />}>
+
+          <Route path="dashboard" element={<Dashboard />} />
+
+          <Route path="packages" element={<Packages />} />
+
+          <Route path="packages/list" element={<PackageList />} />
+
+        </Route>
+
+      </Routes>
+
+    </BrowserRouter>
+
   );
+
 }
+
 export default App;
