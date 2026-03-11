@@ -1,8 +1,11 @@
-import logo from './logo.svg';
+
 import './App.css';
 
 import PlanCard from './Page/PlanCard';
 import { monthlyPlans } from './Page/monthlyPlans';
+import { Data4g } from './Page/Data4g';
+import PlanDetail from "./Page/PlanDetail";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -30,7 +33,27 @@ function App() {
           hasCloudIcon={plan.hasCloudIcon}
         />
       ))}
+
+      {Data4g.map((plan) => (
+        <PlanCard 
+          key={plan.id}
+          planName={plan.planName}
+          dataValue={plan.dataValue}
+          dataUnit={plan.dataUnit}
+          price={plan.price}
+          hasCallIcon={plan.hasCallIcon}
+          hasTv360Icon={plan.hasTv360Icon}
+          hasCloudIcon={plan.hasCloudIcon}
+        />
+      ))}
       
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Data4g />} />
+        <Route path="/plan/:id" element={<PlanDetail />} />
+
+      </Routes>
+    </BrowserRouter>
     </div>
   );
 }
