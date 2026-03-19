@@ -84,6 +84,18 @@ const Header = () => {
             </Link>
           </li>
 
+          {/* INTERNET: Sẽ bôi đỏ và in đậm nếu location.pathname === '/internet' */}
+          <li>
+            <Link 
+              to="/internet" 
+              style={{ 
+                color: location.pathname === '/internet' ? '#e5002b' : '#333',
+                fontWeight: location.pathname === '/internet' ? 'bold' : 'normal' 
+              }}
+            >
+              Internet
+            </Link>
+          </li>
           {/* SIM: Sẽ bôi đỏ và in đậm nếu location.pathname === '/sim' */}
           <li>
             <Link 

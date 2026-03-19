@@ -5,8 +5,8 @@ import AdminLogin from "./admin/Login";
 import Dashboard from "./admin/Dashboard";
 import Packages from "./admin/Packages";
 import PackageList from "./admin/PackageList";
-import AdminLayout from "./admin/AdminLayout"
-
+import AdminLayout from "./admin/AdminLayout";
+import Internet from "./Page/Internet";
 import DashBoard from "./DashBoard/DashBoard";
 import Sim from "./Page/Sim";
 
@@ -18,6 +18,8 @@ function App() {
 
         <Route path="/" element={<DashBoard />} />
         <Route path="/sim" element={<Sim />} />
+        <Route path="/internet" element={<Internet />} />
+        
         <Route path="/admin" element={<AdminLogin />} />
 
         <Route path="/admin" element={<AdminLayout />}>
