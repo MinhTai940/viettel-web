@@ -8,6 +8,7 @@ import PackageList from "./admin/PackageList";
 import AdminLayout from "./admin/AdminLayout"
 
 import DashBoard from "./DashBoard/DashBoard";
+import PlanDetail from "./Page/PlanDetail";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Routes>
 
         <Route path="/" element={<DashBoard />} />
+        <Route path="/plan/:id" element={<PlanDetail />} />
         <Route path="/admin" element={<AdminLogin />} />
 
         <Route path="/admin" element={<AdminLayout />}>

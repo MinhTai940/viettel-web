@@ -122,7 +122,7 @@ const DashBoard = () => {
                               id={p._id}
                               planName={p.name}
                               dataValue={p.data}
-                              dataDuration="/NGÀY"
+                              dataDuration="/ngày"
                               price={p.price}
                               priceDuration={`/ ${p.duration} ngày`}
                               smsCode={p.sms_code}

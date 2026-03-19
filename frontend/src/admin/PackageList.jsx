@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import API from "../services/api"
 import PlanCard from "../Page/PlanCard"
@@ -9,9 +9,14 @@ function PackageList() {
     const [categories, setCategories] = useState([])
     const [packages, setPackages] = useState([])
     const [loading, setLoading] = useState(false)
+
     const [selectedCategory, setSelectedCategory] = useState("")
     const [search, setSearch] = useState("")
-    const [selectedIds, setSelectedIds] = useState([])
+
+    const [activeTab, setActiveTab] = useState("package")
+
+    const [categoryName, setCategoryName] = useState("")
+    const [parentCategory, setParentCategory] = useState("")
 
     const navigate = useNavigate()
 
@@ -19,204 +24,282 @@ function PackageList() {
         loadData()
     }, [])
 
+    // ================= LOAD DATA =================
     const loadData = async () => {
+
         setLoading(true)
+
         try {
-            const [catRes, pkgRes] = await Promise.all([
-                API.get("/categories"),
-                API.get("/packages")
-            ])
+
+            const catRes = await API.get("/categories")
+            const pkgRes = await API.get("/packages")
+
             setCategories(catRes.data)
             setPackages(pkgRes.data)
-        } catch (error) {
-            console.error("Lỗi tải dữ liệu:", error)
-        } finally {
-            setLoading(false)
+
+        } catch (err) {
+            console.log(err)
+        }
+
+        setLoading(false)
+    }
+
+    // ================= CREATE CATEGORY =================
+    const createCategory = async () => {
+
+        if (!categoryName.trim()) {
+            alert("Nhập tên danh mục")
+            return
+        }
+
+        try {
+
+            await API.post("/categories", {
+                name: categoryName,
+                parent: parentCategory || null
+            })
+
+            alert("✅ Tạo danh mục thành công")
+
+            setCategoryName("")
+            setParentCategory("")
+
+            loadData()
+
+        } catch (err) {
+            alert("❌ Lỗi tạo danh mục")
         }
     }
 
+    // ================= DELETE PACKAGE =================
     const deletePackage = async (id) => {
-        if (!window.confirm("Bạn có chắc muốn xóa gói này?")) return
 
-        try {
-            await API.delete(`/packages/${id}`)
-            loadData()
-        } catch (error) {
-            alert("Lỗi xóa gói")
-        }
+        if (!window.confirm("Xóa gói này?")) return
+
+        await API.delete(`/packages/${id}`)
+        loadData()
     }
 
-    const batchDelete = async () => {
-        if (selectedIds.length === 0) return
-        if (!window.confirm(`Xóa ${selectedIds.length} gói đã chọn?`)) return
-
-        try {
-            await Promise.all(selectedIds.map(id => API.delete(`/packages/${id}`)))
-            setSelectedIds([])
-            loadData()
-        } catch (error) {
-            alert("Lỗi xóa hàng loạt")
-        }
-    }
-
-    const editPackage = useCallback((pkg) => {
+    // ================= EDIT =================
+    const editPackage = (pkg) => {
         navigate("/admin/packages", { state: pkg })
-    }, [navigate])
+    }
 
-    // Debounced search
-    const debouncedSearch = useCallback(
-        useMemo(() => {
-            const timeoutId = setTimeout(() => {
-                // Search logic here if needed for API
-            }, 300)
-            return () => clearTimeout(timeoutId)
-        }, [search]),
-        [search]
-    )
-
-    useEffect(() => {
-        debouncedSearch()
-    }, [search, debouncedSearch])
-
-    // Filters
+    // ================= FILTER =================
     const filteredPackages = packages.filter(pkg => {
-        const matchCategory = selectedCategory
-            ? pkg.category?.toString() === selectedCategory
-            : true
-        const matchSearch = pkg.name.toLowerCase().includes(search.toLowerCase())
+
+        const categoryId =
+            typeof pkg.category === "object"
+                ? pkg.category?._id
+                : pkg.category
+
+        const matchCategory =
+            selectedCategory ? categoryId === selectedCategory : true
+
+        const matchSearch =
+            pkg.name?.toLowerCase().includes(search.toLowerCase())
+
         return matchCategory && matchSearch
     })
 
+    // ================= GROUP =================
     const categoryGroups = categories.map(category => {
-        const categoryPackages = filteredPackages.filter(
-            p => p.category?.toString() === category._id
-        )
-        return { category, packages: categoryPackages }
-    }).filter(group => group.packages.length > 0)
+
+        const groupPackages = filteredPackages.filter(pkg => {
+
+            const categoryId =
+                typeof pkg.category === "object"
+                    ? pkg.category?._id
+                    : pkg.category
+
+            return categoryId === category._id
+        })
+
+        return {
+            category,
+            packages: groupPackages
+        }
+
+    }).filter(g => g.packages.length > 0)
+    const childCategories = categories.filter(c => c.parent)
 
     return (
         <div>
+
+            {/* ================= HEADER ================= */}
             <div className="card-header">
+
                 <div>
+
                     <h1 className="card-title">Danh sách gói cước</h1>
+
+                    <div className="tabs">
+
+                        <div
+                            className={activeTab === "package" ? "tab active" : "tab"}
+                            onClick={() => setActiveTab("package")}
+                        >
+                            Danh sách gói
+                        </div>
+
+                        <div
+                            className={activeTab === "category" ? "tab active" : "tab"}
+                            onClick={() => setActiveTab("category")}
+                        >
+                            Tạo danh mục
+                        </div>
+
+                    </div>
+
                     <p className="card-subtitle">
-                        {loading ? "Đang tải..." : `${filteredPackages.length} gói cước`}
+                        {loading ? "Đang tải..." : `${filteredPackages.length} gói`}
                     </p>
+
                 </div>
-                <div className="flex gap-2">
-                    {selectedIds.length > 0 && (
-                        <button className="btn btn-sm btn-danger" onClick={batchDelete}>
-                            Xóa đã chọn ({selectedIds.length})
-                        </button>
-                    )}
-                    <button className="btn btn-primary btn-sm" onClick={loadData}>
-                        ♻️ Làm mới
-                    </button>
-                </div>
+
+                <button className="btn btn-primary btn-sm" onClick={loadData}>
+                    ♻️ Làm mới
+                </button>
+
             </div>
 
-            {/* Filters */}
-            <div className="filters-row">
-                <div className="filter-group">
+            {/* ================= TAB CATEGORY ================= */}
+            {activeTab === "category" && (
+
+                <div className="admin-card">
+
+                    <h3 style={{ marginBottom: 15 }}>Tạo danh mục</h3>
+
                     <select
                         className="select-field"
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        value={parentCategory}
+                        onChange={(e) => setParentCategory(e.target.value)}
                     >
-                        <option value="">Tất cả danh mục</option>
-                        {categories.map(c => (
-                            <option key={c._id} value={c._id}>
-                                {c.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <input
-                        type="text"
-                        className="input-field"
-                        placeholder="🔍 Tìm theo tên gói..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        style={{ minWidth: '300px' }}
-                    />
-                </div>
-            </div>
+                        <option value="">Danh mục cha</option>
 
-            {loading ? (
-                <div className="admin-card text-center" style={{ padding: '60px' }}>
-                    <div className="spinner" style={{ width: '40px', height: '40px', borderWidth: '4px', margin: '0 auto 20px' }}></div>
-                    <p>Đang tải danh sách gói cước...</p>
+                        {categories
+                            .filter(c => !c.parent)
+                            .map(c => (
+                                <option key={c._id} value={c._id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                    </select>
+
+                    <input
+                        className="input-field"
+                        placeholder="Tên danh mục mới"
+                        value={categoryName}
+                        onChange={(e) => setCategoryName(e.target.value)}
+                    />
+
+                    <button
+                        className="btn btn-primary"
+                        onClick={createCategory}
+                    >
+                        Tạo danh mục
+                    </button>
+
                 </div>
-            ) : categoryGroups.length === 0 ? (
-                <div className="admin-card text-center" style={{ padding: '60px', color: '#6b7280' }}>
-                    <p>Không tìm thấy gói cước nào</p>
-                </div>
-            ) : (
-                categoryGroups.map(({ category, packages }) => (
-                    <div key={category._id} className="mb-6">
-                        <div className="card-header">
-                            <h2 className="card-title" style={{ fontSize: '20px' }}>
-                                {category.name} ({packages.length})
-                            </h2>
+
+            )}
+
+            {/* ================= TAB PACKAGE ================= */}
+            {activeTab === "package" && (
+                <>
+                    {/* FILTER */}
+                    <div className="filters-row">
+
+                        <select
+                            className="select-field"
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                        >
+                            <option value="">Tất cả danh mục</option>
+
+                            {childCategories.map(c => (
+                                <option key={c._id} value={c._id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <input
+                            className="input-field"
+                            placeholder="Tìm theo tên gói..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+
+                    </div>
+
+                    {/* LOADING */}
+                    {loading && (
+                        <div className="admin-card text-center">
+                            Đang tải...
                         </div>
-                        <div className="flex flex-wrap gap-4" style={{ gap: '24px' }}>
-                            {packages.map(p => (
-                                <div key={p._id} className="flex flex-col items-center" style={{ minWidth: '280px' }}>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedIds.includes(p._id)}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setSelectedIds([...selectedIds, p._id])
-                                                } else {
-                                                    setSelectedIds(selectedIds.filter(id => id !== p._id))
-                                                }
-                                            }}
-                                            style={{
-                                                position: 'absolute',
-                                                top: '12px',
-                                                left: '12px',
-                                                zIndex: 10,
-                                                width: '20px',
-                                                height: '20px'
-                                            }}
-                                        />
+                    )}
+
+                    {/* EMPTY */}
+                    {!loading && categoryGroups.length === 0 && (
+                        <div className="admin-card text-center">
+                            Không tìm thấy gói cước nào
+                        </div>
+                    )}
+
+                    {/* LIST */}
+                    {categoryGroups.map(group => (
+
+                        <div key={group.category._id} className="mb-6">
+
+                            <h2 className="card-title">
+                                {group.category.name}
+                            </h2>
+
+                            <div className="flex flex-wrap gap-4">
+
+                                {group.packages.map(p => (
+
+                                    <div key={p._id}>
+
                                         <PlanCard
                                             id={p._id}
                                             planName={p.name}
                                             dataValue={p.data}
-                                            dataUnit=""
-                                            dataDuration={`/${p.duration || '30'} NGÀY`}
+                                            dataDuration="/ngày"
                                             price={p.price}
-                                            priceDuration={p.duration || '30'}
+                                            priceDuration={`/${p.duration} ngày`}
                                             smsCode={p.sms_code}
-                                            hasCallIcon={true}
-                                            hasTv360Icon={true}
-                                            hasCloudIcon={true}
                                         />
+
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                className="btn btn-sm btn-primary"
+                                                onClick={() => editPackage(p)}
+                                            >
+                                                Sửa
+                                            </button>
+
+                                            <button
+                                                className="btn btn-sm btn-danger"
+                                                onClick={() => deletePackage(p._id)}
+                                            >
+                                                Xóa
+                                            </button>
+                                        </div>
+
                                     </div>
-                                    <div className="flex gap-2 mt-3">
-                                        <button
-                                            className="btn btn-sm btn-primary"
-                                            onClick={() => editPackage(p)}
-                                        >
-                                            ✏️ Sửa
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-danger"
-                                            onClick={() => deletePackage(p._id)}
-                                        >
-                                            🗑️ Xóa
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+
+                                ))}
+
+                            </div>
+
                         </div>
-                    </div>
-                ))
+
+                    ))}
+                </>
             )}
+
         </div>
     )
 }

@@ -1,34 +1,87 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { monthlyPlans } from "./monthlyData4g.js";
-import "./PlanDetail.css";
+import { useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import API from "../services/api"
+import PlanCard from "./PlanCard"
+import "./PlanDetail.css"
 
 function PlanDetail() {
 
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const plan = monthlyPlans.find((p) => p.id === parseInt(id));
+  const [plan, setPlan] = useState(null)
+  const [relatedPlans, setRelatedPlans] = useState([])
+  const [popup, setPopup] = useState(null)
+
+  useEffect(() => {
+    fetchPlan()
+  }, [id])
+
+  const fetchPlan = async () => {
+    try {
+
+      // ===== LẤY CHI TIẾT =====
+      const res = await API.get(`/packages/${id}`)
+      const currentPlan = res.data
+      setPlan(currentPlan)
+
+      // ===== LẤY CATEGORY ID CHUẨN =====
+      const categoryId =
+        typeof currentPlan.category === "object"
+          ? currentPlan.category?._id
+          : currentPlan.category
+
+      // ===== LẤY TẤT CẢ GÓI =====
+      const allRes = await API.get("/packages")
+
+      const related = allRes.data.filter(p => {
+
+        const pCategoryId =
+          typeof p.category === "object"
+            ? p.category?._id
+            : p.category
+
+        return (
+          String(pCategoryId) === String(categoryId) &&
+          String(p._id) !== String(id)
+        )
+      })
+
+      setRelatedPlans(related.slice(0, 4))
+
+    } catch (err) {
+      console.log("Lỗi load plan:", err)
+    }
+  }
 
   if (!plan) {
-    return <h2 style={{ padding: "40px" }}>Không tìm thấy gói cước</h2>;
+    return <h2 style={{ padding: 40 }}>Đang tải gói cước...</h2>
   }
 
   return (
     <div className="plan-detail-container">
 
-      {/* Tiêu đề */}
+      {/* ===== BANNER ===== */}
+      {plan.banner && (
+        <img
+          src={plan.banner}
+          className="detail-banner"
+          alt="banner"
+        />
+      )}
+
+      {/* ===== TITLE ===== */}
       <h1 className="detail-title">
-        Gói cước Viettel <span>{plan.planName}</span>
+        Gói cước Viettel <span>{plan.name}</span>
       </h1>
 
-      {/* 3 Box thông tin */}
+      {/* ===== INFO BOX ===== */}
       <div className="detail-box-container">
 
         <div className="detail-box">
           <div className="detail-icon">💰</div>
           <div>
             <p>Cước phí</p>
-            <h3>{plan.price}</h3>
+            <h3>{Number(plan.price).toLocaleString()}đ</h3>
           </div>
         </div>
 
@@ -36,85 +89,155 @@ function PlanDetail() {
           <div className="detail-icon">⏱</div>
           <div>
             <p>Thời hạn sử dụng</p>
-            <h3>1 tháng</h3>
+            <h3>{plan.duration} ngày</h3>
           </div>
         </div>
 
         <div className="detail-box">
           <div className="detail-icon">📶</div>
           <div>
-            <p>Dung lượng data 4G tốc độ cao</p>
-            <h3>
-              {plan.dataValue}
-              {plan.dataUnit}/ngày
-            </h3>
+            <p>Dung lượng data</p>
+            <h3>{plan.data}/ngày</h3>
           </div>
         </div>
 
       </div>
 
-      {/* Nội dung chi tiết */}
-      <div className="detail-content">
+      {/* ===== DESCRIPTION ===== */}
+      {plan.description && (
+        <p className="detail-description">{plan.description}</p>
+      )}
 
-        <p>
-          {plan.planName} - Gói cước 4G Viettel thông dụng chỉ với{" "}
-          <b>{plan.price}</b>, cung cấp{" "}
-          <b>
-            {plan.dataValue}
-            {plan.dataUnit}/ngày
-          </b>{" "}
-          giúp bạn truy cập internet tốc độ cao trên điện thoại mà không cần wifi.
-        </p>
+      {/* ===== HTML CONTENT ===== */}
+      {plan.content && (
+        <div
+          className="detail-content"
+          dangerouslySetInnerHTML={{ __html: plan.content }}
+        />
+      )}
 
-        <h2>Thông tin chi tiết gói cước {plan.planName} của Viettel</h2>
+      {/* ===== ⭐ GÓI NÂNG CAO ===== */}
+      {plan.advanced_packages?.length > 0 && (
+        <div className="advanced-section">
 
-        <ul>
-          <li>
-            <b>Tên gói cước:</b> {plan.planName}
-          </li>
-          <li>
-            <b>Cước phí:</b> {plan.price}
-          </li>
-          <li>
-            <b>Thời hạn sử dụng:</b> 1 tháng
-          </li>
-          <li>
-            <b>Dung lượng:</b>{" "}
-            {plan.dataValue}
-            {plan.dataUnit}/ngày
-          </li>
-          <li>
-            <b>Đối tượng áp dụng:</b> Toàn bộ thuê bao Viettel
-          </li>
-          <li>
-            <b>Đăng ký:</b> {plan.planName} gửi 290
-          </li>
-        </ul>
+          <h2>
+            Lựa chọn nâng cao dành riêng cho gói {plan.name}
+          </h2>
 
-        {/* Video */}
+          <table className="advanced-table">
+
+            <thead>
+              <tr>
+                <th>GÓI</th>
+                <th>ƯU ĐÃI</th>
+                <th>ĐƠN GIÁ</th>
+                <th>ĐĂNG KÝ</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {plan.advanced_packages.map((ap, i) => (
+                <tr key={i}>
+
+                  <td>{ap.name}</td>
+
+                  <td>
+                    {ap.data}
+                    <br />
+                    (4GB/ngày)
+                    <br />
+                    Miễn phí TV360
+                    <br />
+                    Miễn phí Mybox
+                  </td>
+
+                  <td>
+                    {Number(ap.price).toLocaleString()}đ
+                    <br />
+                    ({ap.duration})
+                  </td>
+
+                  <td>
+                    <button
+                      className="advanced-register-btn"
+                      onClick={() => setPopup(ap)}
+                    >
+                      Đăng ký
+                    </button>
+                  </td>
+
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+
+        </div>
+      )}
+
+      {/* ===== VIDEO ===== */}
+      {plan.video_url && (
         <div className="video-container">
           <iframe
             width="100%"
             height="420"
-            src="https://www.youtube.com/embed/5ZJpBq8sY4A"
-            title="Viettel Package"
+            src={plan.video_url.replace("watch?v=", "embed/")}
+            title="video"
             frameBorder="0"
             allowFullScreen
-          ></iframe>
+          />
         </div>
+      )}
 
-        {/* Cách đăng ký */}
-        <h2>Cách đăng ký gói cước {plan.planName}</h2>
+      {/* ===== ⭐ RELATED ===== */}
+      {relatedPlans.length > 0 && (
+        <div className="related-section">
 
-        <p>Soạn tin nhắn theo cú pháp:</p>
+          <h2>Gói cước tương tự</h2>
 
-        <div className="register-box">
-          <b>{plan.planName} gửi 290</b>
+          <div className="related-grid">
+            {relatedPlans.map(p => (
+              <PlanCard
+                key={p._id}
+                id={p._id}
+                planName={p.name}
+                dataValue={p.data}
+                dataDuration="/ngày"
+                price={p.price}
+                smsCode={p.sms_code}
+                priceDuration={`/${p.duration} ngày`} />
+            ))}
+          </div>
+
         </div>
+      )}
 
-      </div>
+      {/* ===== ⭐ POPUP ===== */}
+      {popup && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+
+            <h3>Thông báo</h3>
+
+            <p>
+              Để đăng ký gói cước vui lòng soạn tin:
+              <br />
+              <b>{popup.sms_code} UP gửi 290</b>
+            </p>
+
+            <button
+              className="popup-btn"
+              onClick={() => setPopup(null)}
+            >
+              Đóng
+            </button>
+
+          </div>
+        </div>
+      )}
+
     </div>
-  );
+  )
 }
 
-export default PlanDetail;
+export default PlanDetail
