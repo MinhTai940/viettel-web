@@ -10,14 +10,15 @@ exports.getCategories = async (req, res) => {
 
 exports.createCategory = async (req, res) => {
 
-    const category = new Category(req.body)
+    const category = new Category({
+        name: req.body.name,
+        parent: req.body.parent || null
+    })
 
     await category.save()
 
     res.json(category)
-
 }
-
 exports.deleteCategory = async (req, res) => {
 
     await Category.findByIdAndDelete(req.params.id)

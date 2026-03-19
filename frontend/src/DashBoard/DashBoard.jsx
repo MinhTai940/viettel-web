@@ -7,165 +7,149 @@ import API from '../services/api';
 
 const DashBoard = () => {
 
-  const [isOpenThang, setIsOpenThang] = useState(true);
-  const [isOpenNgay, setIsOpenNgay] = useState(true);
-  const [isOpenKhac, setIsOpenKhac] = useState(true);
-
   const [packages, setPackages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [openSection, setOpenSection] = useState(null);
 
   useEffect(() => {
     fetchPackages();
+    fetchCategories();
   }, []);
 
   const fetchPackages = async () => {
-
-    try {
-
-      const res = await API.get("/packages");
-
-      console.log("API packages:", res.data);
-
-      if (Array.isArray(res.data)) {
-        setPackages(res.data);
-      } else {
-        setPackages([]);
-      }
-
-    } catch (error) {
-
-      console.error("Fetch packages error:", error);
-      setPackages([]);
-
-    }
-
+    const res = await API.get("/packages");
+    setPackages(res.data);
   };
 
+  const fetchCategories = async () => {
+    const res = await API.get("/categories");
+    setCategories(res.data);
+  };
+
+  const toggleSection = (id) => {
+    setOpenSection(openSection === id ? null : id);
+  };
+
+  const parentCategories = categories.filter(c => !c.parent);
+
   return (
-    <div className="dashboard-wrapper" style={{ backgroundColor: '#f9f9f9', minHeight: '100vh', paddingBottom: '60px', fontFamily: 'sans-serif' }}>
+    <div style={{ background: "#f9f9f9" }}>
       <Header />
       <Banner />
 
-      <div style={{ maxWidth: '1250px', margin: '40px auto', padding: '0 20px' }}>
+      <div style={{ maxWidth: 1250, margin: "40px auto" }}>
 
-        {/* ================= GÓI CƯỚC THÁNG ================= */}
+        {parentCategories.map(parent => {
 
-        <div style={{ marginBottom: '20px' }}>
+          const childCategories = categories.filter(
+            c => c.parent === parent._id
+          );
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold' }}>
-              Gói cước tháng
-            </h2>
+          return (
 
-            <button onClick={() => setIsOpenThang(!isOpenThang)}>
-              ▼
-            </button>
-          </div>
+            <div key={parent._id} style={{ marginBottom: 40 }}>
 
-          {isOpenThang && (
+              {/* ⭐ HEADER DANH MỤC */}
+              <div
+                onClick={() => toggleSection(parent._id)}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  background: "#fff",
+                  padding: "20px 25px",
+                  borderRadius: 10,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+                }}
+              >
 
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                <h1 style={{ fontSize: 32, margin: 0 }}>
+                  {parent.name}
+                </h1>
 
-              {Array.isArray(packages) &&
-                packages
-                  .filter(p => p.duration && p.duration.includes("30"))
-                  .map(plan => (
+                <div
+                  style={{
+                    width: 45,
+                    height: 45,
+                    borderRadius: "50%",
+                    background: "#eee",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 20
+                  }}
+                >
+                  {openSection === parent._id ? "▲" : "▼"}
+                </div>
 
-                    <PlanCard
-                      key={plan._id}
-                      id={plan._id}
-                      planName={plan.name}
-                      dataValue={plan.data}
-                      dataDuration="/NGÀY"
-                      price={plan.price}
-                      priceDuration="/THÁNG"
-                      smsCode={plan.sms_code}
-                      hasCallIcon
-                      hasTv360Icon
-                      hasCloudIcon
-                    />
+              </div>
 
-                  ))
-              }
+              {/* ⭐ HIỂN THỊ PLAN CARD */}
+              {openSection === parent._id && (
+
+                <div style={{ marginTop: 25 }}>
+
+                  {childCategories.map(child => {
+
+                    const childPackages = packages.filter(
+                      p => p.category === child._id
+                    );
+
+                    if (childPackages.length === 0) return null;
+
+                    return (
+
+                      <div key={child._id} style={{ marginBottom: 35 }}>
+
+                        <h2 style={{
+                          marginBottom: 20,
+                          marginLeft: 5
+                        }}>
+                          {child.name}
+                        </h2>
+
+                        <div style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 20
+                        }}>
+
+                          {childPackages.map(p => (
+
+                            <PlanCard
+                              key={p._id}
+                              id={p._id}
+                              planName={p.name}
+                              dataValue={p.data}
+                              dataDuration="/NGÀY"
+                              price={p.price}
+                              priceDuration={`/ ${p.duration} ngày`}
+                              smsCode={p.sms_code}
+                              hasCallIcon
+                              hasTv360Icon
+                              hasCloudIcon
+                            />
+
+                          ))}
+
+                        </div>
+
+                      </div>
+
+                    )
+
+                  })}
+
+                </div>
+
+              )}
 
             </div>
 
-          )}
+          )
 
-        </div>
-
-        <hr />
-
-        {/* ================= GÓI CƯỚC NGÀY ================= */}
-
-        <div style={{ marginBottom: '20px' }}>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold' }}>
-              Gói cước ngày
-            </h2>
-
-            <button onClick={() => setIsOpenNgay(!isOpenNgay)}>
-              ▼
-            </button>
-          </div>
-
-          {isOpenNgay && (
-
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-
-              {Array.isArray(packages) &&
-                packages
-                  .filter(p => !p.duration || !p.duration.includes("30"))
-                  .map(plan => (
-
-                    <PlanCard
-                      key={plan._id}
-                      id={plan._id}
-                      planName={plan.name}
-                      dataValue={plan.data}
-                      dataDuration="/NGÀY"
-                      price={plan.price}
-                      priceDuration={plan.duration}
-                      smsCode={plan.sms_code}
-                      hasCallIcon
-                      hasTv360Icon
-                      hasCloudIcon
-                    />
-
-                  ))
-              }
-
-            </div>
-
-          )}
-
-        </div>
-
-        <hr />
-
-        {/* ================= GÓI KHÁC ================= */}
-
-        <div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 'bold' }}>
-              Gói cước khác
-            </h2>
-
-            <button onClick={() => setIsOpenKhac(!isOpenKhac)}>
-              ▼
-            </button>
-          </div>
-
-          {isOpenKhac && (
-
-            <div style={{ color: '#888' }}>
-              (Nội dung các gói cước khác sẽ hiển thị ở đây...)
-            </div>
-
-          )}
-
-        </div>
+        })}
 
       </div>
 

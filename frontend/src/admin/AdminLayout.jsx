@@ -1,69 +1,78 @@
-import { Link, Outlet } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Link, Outlet } from "react-router-dom";
+import "./Admin.css";
 
 function AdminLayout() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Check mobile on mount
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     return (
+        <div className="admin-container">
+            {/* Sidebar */}
+            <nav className={`sidebar ${isMobile ? (sidebarOpen ? "mobile-open" : "") : ""}`}>
+                <div className="sidebar-header">
+                    <div className="logo">Viettel Admin</div>
+                </div>
+                <ul className="sidebar-nav">
+                    <li>
+                        <Link to="/admin/dashboard" className="sidebar-link active">
+                            <span className="sidebar-icon">🏠</span>
+                            Dashboard
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/admin/packages" className="sidebar-link">
+                            <span className="sidebar-icon">📦</span>
+                            Quản lý gói cước
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/admin/packages/list" className="sidebar-link">
+                            <span className="sidebar-icon">📋</span>
+                            Danh sách gói
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/admin/news" className="sidebar-link">
+                            <span className="sidebar-icon">📰</span>
+                            Quản lý tin tức
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
 
-        <div>
-
-            {/* SIDEBAR */}
-
-            <div
-                style={{
-                    width: 220,
-                    background: "#111",
-                    color: "white",
-                    height: "100vh",
-                    padding: 20,
-                    position: "fixed",
-                    top: 0,
-                    left: 0
-                }}
-            >
-
-                <h3>Admin</h3>
-
-                <Link to="/admin/dashboard" style={{ color: "white" }}>
-                    Dashboard
-                </Link>
-
-                <br /><br />
-
-                <Link to="/admin/packages" style={{ color: "white" }}>
-                    Quản lý gói cước
-                </Link>
-
-                <br /><br />
-
-                <Link to="/admin/packages/list" style={{ color: "white" }}>
-                    Danh sách gói
-                </Link>
-
-                <br /><br />
-
-                <Link to="/admin/news" style={{ color: "white" }}>
-                    Quản lý tin tức
-                </Link>
-
+            {/* Main */}
+            <div className={`main-wrapper ${isMobile ? "expanded" : ""}`}>
+                <header className="topbar">
+                    <div className="topbar-actions">
+                        <button className="btn-toggle-sidebar" onClick={toggleSidebar}>
+                            {isMobile ? "☰" : "←"}
+                        </button>
+                        <div className="search-input">
+                            <input type="text" placeholder="Tìm kiếm..." style={{ border: 'none', outline: 'none', background: 'transparent', width: '100%' }} />
+                        </div>
+                    </div>
+                    <div className="user-menu">
+                        <span>Admin</span>
+                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#e5002b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>A</div>
+                    </div>
+                </header>
+                <main className="main-content">
+                    <Outlet />
+                </main>
             </div>
-
-
-            {/* CONTENT */}
-
-            <div
-                style={{
-                    marginLeft: 220,
-                    padding: 40
-                }}
-            >
-
-                <Outlet />
-
-            </div>
-
         </div>
-
-    )
+    );
 }
 
-export default AdminLayout
+export default AdminLayout;
