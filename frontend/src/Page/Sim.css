@@ -1,0 +1,239 @@
+.sim-page-wrapper {
+  background-color: #f8fbfc; 
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+.search-section {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  background: #fff;
+  border-radius: 8px; /* Bo góc nhẹ lại giống hình thực tế */
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 1150px;
+  border: 1px solid #eaeaea;
+}
+
+.search-label {
+  color: #333;
+  font-weight: bold;
+  padding: 0 20px;
+  border-right: 1px solid #eee;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* ================= BẢNG HƯỚNG DẪN TÌM KIẾM ================= */
+.search-input-wrapper {
+  flex: 1; /* Chiếm hết khoảng trống giữa Label và Nút bấm */
+  position: relative; /* Làm gốc tọa độ cho bảng hướng dẫn */
+}
+
+.search-input {
+  width: 100%; /* Căng tràn cái wrapper */
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+}
+
+/* Khung Tooltip Hướng dẫn */
+.search-tooltip {
+  position: absolute;
+  top: calc(100% + 15px); /* Nằm rớt xuống dưới thanh search 15px */
+  left: 0;
+  background-color: #fff5f6; /* Màu nền hồng nhạt giống hình */
+  border-radius: 6px;
+  padding: 15px 20px;
+  width: 480px; /* Độ rộng của bảng */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 100; /* Luôn nổi lên trên cùng */
+
+  /* Hiệu ứng ẩn mặc định */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+/* Vẽ hình tam giác (mũi tên) trỏ lên trên */
+.search-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -10px; /* Nhô lên trên */
+  left: 30px; /* Căn mép trái 30px cho khớp với chữ TÌM SỐ */
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff5f6 transparent; /* Tam giác màu hồng nhạt */
+}
+
+/* Khi trỏ chuột VÀO WRAPPER hoặc ĐANG GÕ (focus) thì hiện Tooltip ra */
+.search-input-wrapper:hover .search-tooltip,
+.search-input:focus + .search-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Định dạng chữ nghĩa bên trong bảng */
+.search-tooltip h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.search-tooltip ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-tooltip li {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.search-tooltip li:last-child {
+  margin-bottom: 0;
+}
+
+.search-btn {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc; 
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  border-color: #333;
+}
+
+.excel-note {
+  text-align: right;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.sim-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sim-grid-layout {
+  display: flex;
+  gap: 40px; 
+}
+
+.sim-column {
+  flex: 1; 
+}
+
+.section-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+/* ================= CSS MỚI CHO TAB VÀ LƯỚI ================= */
+
+/* Khu vực chứa 2 nút Tab */
+.tab-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eaeaea;
+}
+
+/* Nút Tab mặc định */
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #777;
+  padding: 10px 20px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+/* Nút Tab khi được click (active) */
+.tab-btn.active {
+  color: #e5002b; /* Chữ màu đỏ */
+}
+
+/* Thanh gạch dưới màu đỏ chạy lướt qua khi active */
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; /* Đè lên cái viền xám ở dưới */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #e5002b;
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-btn:hover {
+  color: #e5002b;
+}
+
+/* ================= CSS CHO LƯỚI CARD SIM ================= */
+.sim-tab-content {
+  margin-bottom: 50px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Ép 1 hàng chứa đúng 2 thẻ */
+  gap: 30px; /* Khoảng cách giữa các thẻ rộng rãi ra xíu */
+}
+/* ================= HIỆU ỨNG CHUYỂN TAB MƯỢT MÀ ================= */
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px); /* Bắt đầu từ dưới trượt nhẹ lên 15px */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);    /* Về lại vị trí cũ */
+  }
+}
+
+.fade-in-tab {
+  animation: tabFadeIn 0.4s ease-out forwards; /* Thời gian 0.4 giây, chạy mượt dần */
+}

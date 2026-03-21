@@ -9,7 +9,7 @@ import AdminLayout from "./admin/AdminLayout"
 
 import DashBoard from "./DashBoard/DashBoard";
 import PlanDetail from "./Page/PlanDetail";
-
+import AdminInternet from "./admin/AdminInternet";
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
           <Route path="/admin/packages" element={<Packages />} />
 
           <Route path="/admin/packages/list" element={<PackageList />} />
+          <Route path="/admin/internet" element={<AdminInternet />} />
 
         </Route>
       </Routes>

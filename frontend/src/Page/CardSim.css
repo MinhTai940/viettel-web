@@ -1,0 +1,110 @@
+.sim-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+  border: 1px solid #eaeaea;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+/* Đổi viền hover phát sáng sang màu đỏ nhạt */
+.sim-card:hover {
+  border-color: rgba(229, 0, 43, 0.4); 
+  box-shadow: 0 0 15px rgba(229, 0, 43, 0.15);
+}
+
+/* LOGO GÓC TRÁI - NHUỘM ĐỎ */
+.badge-5g-corner {
+  background-color: #e5002b; 
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-5g-corner .badge-text {
+  font-weight: 900;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.badge-5g-corner .badge-wifi {
+  width: 16px;
+  height: 16px;
+}
+
+/* LOGO Ở GIỮA - NHUỘM ĐỎ */
+.card-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center-5g-logo {
+  display: flex;
+  align-items: flex-start;
+}
+
+.center-text {
+  font-size: 65px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -3px;
+  color: #e5002b; /* Chữ 5G màu đỏ */
+}
+
+.center-wifi {
+  width: 45px;
+  height: 45px;
+  margin-left: 0px;
+  margin-top: 5px;
+}
+
+/* KHÚC DƯỚI CÙNG */
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.sim-info-group {
+  display: flex;
+  gap: 40px;
+}
+
+.sim-info .label {
+  font-size: 13px;
+  color: #777;
+}
+
+.sim-info .value {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* NÚT LIÊN HỆ ĐỔI THÀNH MÀU ĐỎ KHI HOVER */
+.contact-btn {
+  background: #fff;
+  border: 1px solid #e5002b;
+  color: #e5002b;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sim-card:hover .contact-btn {
+  background-color: #e5002b;
+  color: #fff;
+}

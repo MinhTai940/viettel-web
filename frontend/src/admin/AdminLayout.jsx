@@ -43,9 +43,9 @@ function AdminLayout() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/admin/news" className="sidebar-link">
-                            <span className="sidebar-icon">📰</span>
-                            Quản lý tin tức
+                        <Link to="/admin/internet" className="sidebar-link">
+                            <span className="sidebar-icon">🌐</span>
+                            Quản lý Internet
                         </Link>
                     </li>
                 </ul>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
+import { Link, useLocation } from 'react-router-dom'; // Đã thêm useLocation vào đây
 import viettelLogo from '../assets/viettel-logo.jpg';
 import API from '../services/api';
 
@@ -7,6 +8,9 @@ const Header = () => {
 
   const [categories, setCategories] = useState([]);
   const [openParent, setOpenParent] = useState(null);
+  
+  // Bật "radar" để lấy đường dẫn hiện tại (ví dụ: '/' hoặc '/sim')
+  const location = useLocation();
 
   useEffect(() => {
     fetchCategories();
@@ -36,7 +40,6 @@ const Header = () => {
 
   // scroll lên đầu trang
   const scrollToTop = (e) => {
-    e.preventDefault();
     window.scrollTo({
       top: 0,
       behavior: "smooth"
@@ -58,19 +61,56 @@ const Header = () => {
         style={{ cursor: 'pointer' }}
         onClick={scrollToTop}
       >
-        <img src={viettelLogo} alt="Viettel Logo" className="logo-img" />
+        <Link to="/">
+          <img src={viettelLogo} alt="Viettel Logo" className="logo-img" />
+        </Link>
       </div>
 
       {/* MENU */}
       <nav className="nav-menu">
         <ul className="nav-links">
 
+          {/* TRANG CHỦ: Sẽ bôi đỏ và in đậm nếu location.pathname === '/' */}
           <li>
-            <a href="#" onClick={scrollToTop}>Trang chủ</a>
+            <Link 
+              to="/" 
+              onClick={scrollToTop}
+              style={{ 
+                color: location.pathname === '/' ? '#e5002b' : '#333',
+                fontWeight: location.pathname === '/' ? 'bold' : 'normal'
+              }}
+            >
+              Trang chủ
+            </Link>
           </li>
 
-          <li className="dropdown">
+          {/* INTERNET: Sẽ bôi đỏ và in đậm nếu location.pathname === '/internet' */}
+          <li>
+            <Link 
+              to="/internet" 
+              style={{ 
+                color: location.pathname === '/internet' ? '#e5002b' : '#333',
+                fontWeight: location.pathname === '/internet' ? 'bold' : 'normal' 
+              }}
+            >
+              Internet
+            </Link>
+          </li>
+          {/* SIM: Sẽ bôi đỏ và in đậm nếu location.pathname === '/sim' */}
+          <li>
+            <Link 
+              to="/sim"
+              style={{ 
+                color: location.pathname === '/sim' ? '#e5002b' : '#333',
+                fontWeight: location.pathname === '/sim' ? 'bold' : 'normal'
+              }}
+            >
+              Sim
+            </Link>
+          </li>
 
+          {/* DROP-DOWN GÓI CƯỚC (Giữ nguyên của mày) */}
+          <li className="dropdown">
             <a
               href="#"
               style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
@@ -89,20 +129,13 @@ const Header = () => {
             </a>
 
             <ul className="dropdown-menu">
-
               {parentCategories.map(parent => {
-
                 const childCategories = categories.filter(
                   c => c.parent === parent._id
                 );
 
-                const parentId = parent.name
-                  .toLowerCase()
-                  .replace(/\s+/g, '-');
-
                 return (
                   <li key={parent._id}>
-
                     {/* CLICK CHA */}
                     <a
                       href="#"
@@ -124,11 +157,8 @@ const Header = () => {
 
                     {/* HIỂN THỊ CON */}
                     {openParent === parent._id && (
-
                       <ul style={{ paddingLeft: 15 }}>
-
                         {childCategories.map(child => {
-
                           const childId = child.name
                             .toLowerCase()
                             .replace(/\s+/g, '-');
@@ -144,18 +174,12 @@ const Header = () => {
                             </li>
                           )
                         })}
-
                       </ul>
-
                     )}
-
                   </li>
                 )
-
               })}
-
             </ul>
-
           </li>
 
         </ul>
