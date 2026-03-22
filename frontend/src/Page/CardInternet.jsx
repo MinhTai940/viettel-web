@@ -1,7 +1,10 @@
 import { useState } from "react"
 import "./Internet.css"
+import { useNavigate } from "react-router-dom"
 
 const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
+
+  const navigate = useNavigate()
 
   const [area, setArea] = useState("tinh")
 
@@ -11,22 +14,19 @@ const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
       : Number(data.price_tinh)
 
   return (
-    <div className="vt-card">
+    <div
+      className="vt-card"
+      onClick={() => navigate("/internet/" + data._id)}
+      style={{ cursor: "pointer" }}
+    >
 
-      {/* CONTENT */}
       <div className="vt-content">
 
         {/* HEADER */}
         <div className="vt-header">
-          <div className="vt-name">
-            {data.name}
-          </div>
-
-          <div className="vt-speed">
-            {data.speed}
-          </div>
+          <div className="vt-name">{data.name}</div>
+          <div className="vt-speed">{data.speed}</div>
         </div>
-
 
         <div className="vt-line" />
 
@@ -43,30 +43,41 @@ const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
           <div className="vt-label">Khu vực lắp đặt</div>
 
           <div className="vt-radio">
-            <label>
+
+            <label onClick={(e) => e.stopPropagation()}>
               <input
                 type="radio"
                 checked={area === "hn"}
-                onChange={() => setArea("hn")}
+                onChange={(e) => {
+                  e.stopPropagation()
+                  setArea("hn")
+                }}
               />
               HN & TP.HCM
             </label>
 
-            <label>
+            <label onClick={(e) => e.stopPropagation()}>
               <input
                 type="radio"
                 checked={area === "tinh"}
-                onChange={() => setArea("tinh")}
+                onChange={(e) => {
+                  e.stopPropagation()
+                  setArea("tinh")
+                }}
               />
               Tỉnh/TP khác
             </label>
+
           </div>
         </div>
 
         <div className="vt-line" />
 
         {/* PRICE */}
-        <div className="vt-price-box">
+        <div
+          className="vt-price-box"
+          onClick={(e) => e.stopPropagation()}
+        >
 
           <div className="vt-price-label">ĐƠN GIÁ</div>
 
@@ -74,7 +85,14 @@ const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
             {price?.toLocaleString()}đ/tháng
           </div>
 
-          <button className="vt-btn-register">
+          <button
+            className="vt-btn-register"
+            onClick={(e) => {
+              e.stopPropagation()
+
+              alert("Đăng ký gói " + data.name)
+            }}
+          >
             ĐĂNG KÝ
           </button>
 
@@ -82,9 +100,27 @@ const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
 
         {/* ADMIN */}
         {isAdmin && (
-          <div className="vt-admin">
-            <button onClick={() => onEdit(data)}>Sửa</button>
-            <button onClick={() => onDelete(data._id)}>Xóa</button>
+          <div
+            className="vt-admin"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit(data)
+              }}
+            >
+              Sửa
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(data._id)
+              }}
+            >
+              Xóa
+            </button>
           </div>
         )}
 

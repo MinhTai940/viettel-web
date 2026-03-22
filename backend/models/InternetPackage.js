@@ -12,6 +12,7 @@ const InternetPackageSchema = new mongoose.Schema({
     area: String,
     description: String,
     image: String,
+    detail: String,
 
     category: {
         type: mongoose.Schema.Types.ObjectId,

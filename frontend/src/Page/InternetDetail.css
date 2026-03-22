@@ -1,0 +1,25 @@
+.internet-detail-container {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+.internet-detail-box {
+    background: #f5f5f5;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.related-section {
+    margin-top: 60px;
+}
+
+.related-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}

@@ -299,3 +299,34 @@
 .vt-btn-register:hover {
   transform: translateY(-2px);
 }
+
+.internet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.internet-section {
+  margin-bottom: 80px;
+}
+
+.internet-section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.internet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.internet-section-desc {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 40px;
+}

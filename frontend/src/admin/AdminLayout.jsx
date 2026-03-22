@@ -48,6 +48,12 @@ function AdminLayout() {
                             Quản lý Internet
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/admin/sim" className="sidebar-link">
+                            <span className="sidebar-icon">📱</span>
+                            Quản lý SIM
+                        </Link>
+                    </li>
                 </ul>
             </nav>
 

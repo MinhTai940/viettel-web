@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import API from "../services/api"
 import CardInternet from "../Page/CardInternet"
+import ReactQuill from "react-quill"
+import "react-quill/dist/quill.snow.css"
 
 export default function AdminInternet() {
 
@@ -9,6 +11,7 @@ export default function AdminInternet() {
     const [editingId, setEditingId] = useState(null)
     const [tab, setTab] = useState("package")
     const [cateName, setCateName] = useState("")
+    const [detail, setDetail] = useState("")
 
     const [form, setForm] = useState({
         name: "",
@@ -60,6 +63,7 @@ export default function AdminInternet() {
 
         const payload = {
             ...form,
+            detail: detail,
             price_hn: Number(form.price_hn),
             price_tinh: Number(form.price_tinh)
         }
@@ -77,8 +81,9 @@ export default function AdminInternet() {
             price_hn: "",
             price_tinh: "",
             category: "",
-            description: ""
+            description: "",
         })
+        setDetail("")
 
         loadData()
     }
@@ -92,8 +97,10 @@ export default function AdminInternet() {
             price_hn: p.price_hn,
             price_tinh: p.price_tinh,
             category: p.category?._id,
+            description: p.description,
             description: p.description
         })
+        setDetail(p.detail || "")
     }
 
     const remove = async (id) => {
@@ -223,6 +230,17 @@ export default function AdminInternet() {
                     <button onClick={submit}>
                         {editingId ? "Cập nhật" : "Tạo gói"}
                     </button>
+
+                    <div style={{ marginTop: 20 }}>
+                        <label>Nội dung chi tiết</label>
+
+                        <ReactQuill
+                            theme="snow"
+                            value={detail}
+                            onChange={setDetail}
+                            style={{ height: 200, marginBottom: 40 }}
+                        />
+                    </div>
 
                 </div>
             )}
