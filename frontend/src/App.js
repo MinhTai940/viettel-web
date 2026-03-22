@@ -10,6 +10,7 @@ import AdminLayout from "./admin/AdminLayout"
 import DashBoard from "./DashBoard/DashBoard";
 import PlanDetail from "./Page/PlanDetail";
 import AdminInternet from "./admin/AdminInternet";
+import Internet from "./Page/Internet";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<DashBoard />} />
         <Route path="/plan/:id" element={<PlanDetail />} />
         <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/internet" element={<Internet />} />
 
         <Route path="/admin" element={<AdminLayout />}>
 

@@ -1,122 +1,92 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import "./Internet.css"
 
-const CardInternet = ({ data }) => {
+const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
 
-  // ⭐ mặc định chọn tỉnh
   const [area, setArea] = useState("tinh")
 
   const price =
     area === "hn"
-      ? data.price_hn
-      : data.price_tinh
+      ? Number(data.price_hn)
+      : Number(data.price_tinh)
 
   return (
-    <div className="internet-card">
+    <div className="vt-card">
 
-      {/* SPEED */}
-      <div className="internet-speed-section">
-        <span className="speed-amount">
-          {data.speed}
-        </span>
-      </div>
+      {/* CONTENT */}
+      <div className="vt-content">
 
-      {/* NAME */}
-      <div className="card-top">
-        <h3 className="internet-plan-title">
-          {data.name}
-        </h3>
-      </div>
-
-      {/* FEATURES */}
-      <div className="internet-features-section">
-
-        {/* MODEM */}
-        {data.modem && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              1 Modem {data.modem}
-            </span>
+        {/* HEADER */}
+        <div className="vt-header">
+          <div className="vt-name">
+            {data.name}
           </div>
-        )}
 
-        {/* MESH */}
-        {data.mesh && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              + 1 Mesh Wifi
-            </span>
+          <div className="vt-speed">
+            {data.speed}
           </div>
-        )}
-
-        {/* DESCRIPTION */}
-        {data.description && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              {data.description}
-            </span>
-          </div>
-        )}
-
-      </div>
-
-      {/* AREA */}
-      <div className="internet-feature-row">
-        <span className="internet-feature-text">
-          Khu vực lắp đặt
-        </span>
-
-        <div style={{ marginTop: 5 }}>
-          <label style={{ marginRight: 15 }}>
-            <input
-              type="radio"
-              checked={area === "hn"}
-              onChange={() => setArea("hn")}
-            />
-            HN & TP.HCM
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              checked={area === "tinh"}
-              onChange={() => setArea("tinh")}
-            />
-            Tỉnh/TP khác
-          </label>
-        </div>
-      </div>
-
-      <div className="internet-divider" />
-
-      {/* PRICE */}
-      <div className="internet-price-section">
-
-        <span className="price-label">
-          Đơn giá
-        </span>
-
-        <div className="price-display">
-          <span className="price-amount">
-            {price?.toLocaleString()}
-          </span>
-          <span className="price-unit">
-            đ/tháng
-          </span>
         </div>
 
-      </div>
 
-      {/* ACTION */}
-      <div className="internet-action-section">
+        <div className="vt-line" />
 
-        <button className="internet-btn internet-red-btn">
-          Đăng ký
-        </button>
+        {/* FEATURE */}
+        <div className="vt-block">
+          <div className="vt-label">Tiện ích</div>
+          <div className="vt-value">
+            {data.description || "1 Modem Wifi 6"}
+          </div>
+        </div>
 
-        <button className="internet-btn internet-white-btn">
-          Chi tiết gói cước
-        </button>
+        {/* AREA */}
+        <div className="vt-block">
+          <div className="vt-label">Khu vực lắp đặt</div>
+
+          <div className="vt-radio">
+            <label>
+              <input
+                type="radio"
+                checked={area === "hn"}
+                onChange={() => setArea("hn")}
+              />
+              HN & TP.HCM
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                checked={area === "tinh"}
+                onChange={() => setArea("tinh")}
+              />
+              Tỉnh/TP khác
+            </label>
+          </div>
+        </div>
+
+        <div className="vt-line" />
+
+        {/* PRICE */}
+        <div className="vt-price-box">
+
+          <div className="vt-price-label">ĐƠN GIÁ</div>
+
+          <div className="vt-price">
+            {price?.toLocaleString()}đ/tháng
+          </div>
+
+          <button className="vt-btn-register">
+            ĐĂNG KÝ
+          </button>
+
+        </div>
+
+        {/* ADMIN */}
+        {isAdmin && (
+          <div className="vt-admin">
+            <button onClick={() => onEdit(data)}>Sửa</button>
+            <button onClick={() => onDelete(data._id)}>Xóa</button>
+          </div>
+        )}
 
       </div>
 
