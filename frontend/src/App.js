@@ -10,6 +10,10 @@ import AdminLayout from "./admin/AdminLayout"
 import DashBoard from "./DashBoard/DashBoard";
 import PlanDetail from "./Page/PlanDetail";
 import AdminInternet from "./admin/AdminInternet";
+import Internet from "./Page/Internet";
+import Sim from "./Page/Sim";
+import AdminSimList from "./admin/simlist";
+import AdminSimAdd from "./admin/sim";
 
 function App() {
   return (
@@ -20,6 +24,9 @@ function App() {
         <Route path="/plan/:id" element={<PlanDetail />} />
         <Route path="/admin" element={<AdminLogin />} />
 
+        <Route path="/internet" element={<Internet />} />
+        <Route path="/sim" element={<Sim />} />
+
         <Route path="/admin" element={<AdminLayout />}>
 
           <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -28,7 +35,7 @@ function App() {
 
           <Route path="/admin/packages/list" element={<PackageList />} />
           <Route path="/admin/internet" element={<AdminInternet />} />
-
+          <Route path="sim" element={<AdminSimList />} />
         </Route>
       </Routes>
     </BrowserRouter>
