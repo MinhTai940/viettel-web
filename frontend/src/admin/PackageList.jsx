@@ -88,8 +88,7 @@ function PackageList() {
     const editPackage = (pkg) => {
         navigate("/admin/packages", { state: pkg })
     }
-
-    // ================= FILTER =================
+    // ================= FILTER ======================
     const filteredPackages = packages.filter(pkg => {
 
         if (!pkg || !pkg.category) return false
