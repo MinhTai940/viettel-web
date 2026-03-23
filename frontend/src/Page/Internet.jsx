@@ -63,7 +63,15 @@ const Internet = () => {
     //   "Kết nối mượt mà cho không gian sống gọn, vừa đủ cho nhu cầu cá nhân",
 
     "Gói cước Camera gia đình an tâm":
-      "Giải pháp internet + camera giúp bảo vệ ngôi nhà của bạn"
+      "Giải pháp internet + camera giúp bảo vệ ngôi nhà của bạn",
+    "Gói giải trí truyền hình đa nền tảng":
+      "Internet tốc độ cao kèm truyền hình với kho nội dung giải trí phong phú",
+    "Gói cước camera gia đình an tâm":
+      "Giải pháp internet + camera giúp bảo vệ ngôi nhà của bạn",
+    "Gói cước toàn diện cho nhà cao tầng":
+      "Internet tốc độ cao kèm thiết bị mở rộng Mesh WiFi phủ sóng mạnh mẽ cho nhà nhiều tầng",
+    "Gói cước Ultra Speed":
+      "Bứt phá giới hạn tốc độ với đường truyền siêu ổn định, tối ưu cho coder, dân văn phòng và streamer chuyên nghiệp",
   }
   return (
     <div className="internet-page-wrapper">
