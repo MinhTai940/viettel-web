@@ -47,18 +47,18 @@ const CardSim = ({ stt, soSim }) => {
           <div className="badge-5g-corner">
             <span className="badge-text">5G</span>
             <svg viewBox="0 0 24 24" className="badge-wifi" fill="none" stroke="currentColor" strokeWidth="3">
-              <path d="M5 12.55a11 11 0 0 1 14.08 0 M1.42 9a16 16 0 0 1 21.16 0 M8.53 16.11a6 6 0 0 1 6.95 0" strokeLinecap="round"/>
+              <path d="M5 12.55a11 11 0 0 1 14.08 0 M1.42 9a16 16 0 0 1 21.16 0 M8.53 16.11a6 6 0 0 1 6.95 0" strokeLinecap="round" />
             </svg>
           </div>
         </div>
-        
+
         <div className="card-center">
           <div className="center-5g-logo">
             <span className="center-text">5G</span>
             <svg viewBox="0 0 24 24" className="center-wifi" fill="none" strokeWidth="3" strokeLinecap="round">
-                <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke="#e5002b" />
-                <path d="M1.42 9a16 16 0 0 1 21.16 0" stroke="#e5002b" />
-                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="#e5002b" />
+              <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke="#e5002b" />
+              <path d="M1.42 9a16 16 0 0 1 21.16 0" stroke="#e5002b" />
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="#e5002b" />
             </svg>
           </div>
         </div>
@@ -66,11 +66,11 @@ const CardSim = ({ stt, soSim }) => {
         <div className="card-bottom">
           <div className="sim-info-group">
             <div className="sim-info">
-              <span className="label">STT</span><br/>
+              <span className="label">STT</span><br />
               <span className="value">{stt}</span>
             </div>
             <div className="sim-info">
-              <span className="label">Số SIM</span><br/>
+              <span className="label">Số SIM</span><br />
               <span className="value">{soSim}</span>
             </div>
           </div>
@@ -79,42 +79,42 @@ const CardSim = ({ stt, soSim }) => {
       </div>
 
       {showQRModal && contactConfig && (
-        <div style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: '100%', 
-          backgroundColor: 'rgba(0,0,0,0.5)', 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           zIndex: 9999,
           animation: 'fadeIn 0.3s ease-in-out'
         }}>
-          <div style={{ 
-            background: '#fff', 
-            padding: '40px 35px', 
-            borderRadius: '16px', 
+          <div style={{
+            background: '#fff',
+            padding: '40px 35px',
+            borderRadius: '16px',
             width: '100%',
-            maxWidth: '380px', 
-            textAlign: 'center', 
-            position: 'relative', 
+            maxWidth: '380px',
+            textAlign: 'center',
+            position: 'relative',
             boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
             animation: 'slideUp 0.3s ease-out'
           }}>
-            
-            <button 
-              onClick={() => setShowQRModal(false)} 
-              style={{ 
-                position: 'absolute', 
-                top: '12px', 
-                right: '12px', 
-                fontSize: '28px', 
-                cursor: 'pointer', 
-                color: '#999', 
-                background: 'transparent', 
-                border: 'none', 
+
+            <button
+              onClick={() => setShowQRModal(false)}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                fontSize: '28px',
+                cursor: 'pointer',
+                color: '#999',
+                background: 'transparent',
+                border: 'none',
                 fontWeight: 'bold',
                 padding: '0 8px',
                 transition: 'color 0.2s'
@@ -124,55 +124,55 @@ const CardSim = ({ stt, soSim }) => {
             >
               ✕
             </button>
-            
-            <h2 style={{ 
-              color: '#e5002b', 
-              marginTop: '5px', 
-              marginBottom: '20px', 
+
+            <h2 style={{
+              color: '#e5002b',
+              marginTop: '5px',
+              marginBottom: '20px',
               fontSize: '24px',
               fontWeight: '700'
             }}>Quét mã QR Zalo</h2>
-            
-            <p style={{ 
-              color: '#666', 
-              marginBottom: '20px', 
+
+            <p style={{
+              color: '#666',
+              marginBottom: '20px',
               fontSize: '15px',
               fontWeight: '500'
             }}>
               Để mua SIM vui lòng liên hệ
             </p>
-            
+
             <div style={{ marginBottom: '20px' }}>
               {contactConfig.qrCodeUrl ? (
-                <div style={{ 
-                  background: '#f5f5f5', 
-                  padding: '15px', 
-                  borderRadius: '12px', 
+                <div style={{
+                  background: '#f5f5f5',
+                  padding: '15px',
+                  borderRadius: '12px',
                   border: '2px solid #e5002b',
                   display: 'inline-block'
                 }}>
-                  <img 
-                    src={`${serverUrl}${contactConfig.qrCodeUrl}`} 
-                    alt="Zalo QR" 
-                    style={{ 
-                      width: '220px', 
-                      height: '220px', 
+                  <img
+                    src={`${serverUrl}${contactConfig.qrCodeUrl}`}
+                    alt="Zalo QR"
+                    style={{
+                      width: '220px',
+                      height: '220px',
                       objectFit: 'contain',
                       display: 'block'
-                    }} 
+                    }}
                   />
                 </div>
               ) : (
-                <div style={{ 
-                  width: '220px', 
-                  height: '220px', 
-                  background: '#f5f5f5', 
-                  margin: '0 auto', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  color: '#999', 
-                  borderRadius: '12px', 
+                <div style={{
+                  width: '220px',
+                  height: '220px',
+                  background: '#f5f5f5',
+                  margin: '0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#999',
+                  borderRadius: '12px',
                   border: '2px dashed #ddd',
                   fontSize: '14px'
                 }}>
@@ -180,16 +180,16 @@ const CardSim = ({ stt, soSim }) => {
                 </div>
               )}
             </div>
-            <div style={{ 
-              marginBottom: '20px', 
-              padding: '16px', 
-              background: '#f8f8f8', 
+            <div style={{
+              marginBottom: '20px',
+              padding: '16px',
+              background: '#f8f8f8',
               borderRadius: '10px',
               border: '1px solid #e5e5e5'
             }}>
-              <div style={{ 
-                fontSize: '13px', 
-                color: '#777', 
+              <div style={{
+                fontSize: '13px',
+                color: '#777',
                 marginBottom: '8px'
               }}>
                 Hỗ trợ viên:
@@ -202,26 +202,26 @@ const CardSim = ({ stt, soSim }) => {
               }}>
                 {contactConfig.zaloName}
               </div>
-              <div style={{ 
-                fontSize: '14px', 
+              <div style={{
+                fontSize: '14px',
                 color: '#777',
                 marginBottom: '5px'
               }}>
                 Số điện thoại:
               </div>
-              <div style={{ 
-                fontSize: '18px', 
-                fontWeight: '700', 
+              <div style={{
+                fontSize: '18px',
+                fontWeight: '700',
                 color: '#e5002b'
               }}>
                 {contactConfig.zaloPhone}
               </div>
             </div>
-            
-            <p style={{ 
-              fontSize: '12px', 
-              color: '#999', 
-              marginTop: '15px', 
+
+            <p style={{
+              fontSize: '12px',
+              color: '#999',
+              marginTop: '15px',
               fontStyle: 'italic',
               marginBottom: '0'
             }}>
@@ -230,7 +230,7 @@ const CardSim = ({ stt, soSim }) => {
           </div>
         </div>
       )}
-      
+
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }

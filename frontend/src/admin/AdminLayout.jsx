@@ -1,84 +1,172 @@
-import { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
-import "./Admin.css";
+import { useState, useEffect } from "react"
+import { Link, Outlet, useLocation } from "react-router-dom"
 
-function AdminLayout() {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+export default function AdminLayout() {
 
-    // Check mobile on mount
+    const [open, setOpen] = useState(true)
+    const [mobile, setMobile] = useState(false)
+
+    const location = useLocation()
+
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
-    }, []);
+        const check = () => setMobile(window.innerWidth < 1024)
+        check()
+        window.addEventListener("resize", check)
+        return () => window.removeEventListener("resize", check)
+    }, [])
 
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+    const toggle = () => setOpen(!open)
+
+    const menu = [
+        { name: "Dashboard", path: "/admin/dashboard", icon: "🏠" },
+        { name: "Gói cước", path: "/admin/packages", icon: "📦" },
+        { name: "Danh sách gói", path: "/admin/packages/list", icon: "📋" },
+        { name: "Internet", path: "/admin/internet", icon: "🌐" },
+        { name: "SIM", path: "/admin/sim", icon: "📱" }
+    ]
 
     return (
-        <div className="admin-container">
-            {/* Sidebar */}
-            <nav className={`sidebar ${isMobile ? (sidebarOpen ? "mobile-open" : "") : ""}`}>
-                <div className="sidebar-header">
-                    <div className="logo">Viettel Admin</div>
-                </div>
-                <ul className="sidebar-nav">
-                    <li>
-                        <Link to="/admin/dashboard" className="sidebar-link active">
-                            <span className="sidebar-icon">🏠</span>
-                            Dashboard
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/packages" className="sidebar-link">
-                            <span className="sidebar-icon">📦</span>
-                            Quản lý gói cước
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/packages/list" className="sidebar-link">
-                            <span className="sidebar-icon">📋</span>
-                            Danh sách gói
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/internet" className="sidebar-link">
-                            <span className="sidebar-icon">🌐</span>
-                            Quản lý Internet
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/sim" className="sidebar-link">
-                            <span className="sidebar-icon">📱</span>
-                            Quản lý SIM
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
+        <div style={styles.container}>
 
-            {/* Main */}
-            <div className={`main-wrapper ${isMobile ? "expanded" : ""}`}>
-                <header className="topbar">
-                    <div className="topbar-actions">
-                        <button className="btn-toggle-sidebar" onClick={toggleSidebar}>
-                            {isMobile ? "☰" : "←"}
-                        </button>
-                        <div className="search-input">
-                            <input type="text" placeholder="Tìm kiếm..." style={{ border: 'none', outline: 'none', background: 'transparent', width: '100%' }} />
-                        </div>
-                    </div>
-                    <div className="user-menu">
-                        <span>Admin</span>
-                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#e5002b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>A</div>
-                    </div>
-                </header>
-                <main className="main-content">
-                    <Outlet />
-                </main>
+            {/* SIDEBAR */}
+            <div style={{
+                ...styles.sidebar,
+                ...(mobile && !open ? styles.sidebarHide : {})
+            }}>
+
+                <div style={styles.logo}>
+                    Viettel Admin
+                </div>
+
+                {menu.map(m => (
+                    <Link
+                        key={m.path}
+                        to={m.path}
+                        style={{
+                            ...styles.link,
+                            ...(location.pathname === m.path ? styles.active : {})
+                        }}
+                    >
+                        <span style={{ marginRight: 10 }}>{m.icon}</span>
+                        {m.name}
+                    </Link>
+                ))}
+
             </div>
+
+            {/* MAIN */}
+            <div style={styles.main}>
+
+                {/* TOPBAR */}
+                <div style={styles.topbar}>
+
+                    <button style={styles.menuBtn} onClick={toggle}>
+                        ☰
+                    </button>
+
+                    <input
+                        placeholder="Tìm kiếm..."
+                        style={styles.search}
+                    />
+
+                    <div style={styles.user}>
+                        Admin
+                    </div>
+
+                </div>
+
+                {/* CONTENT */}
+                <div style={styles.content}>
+                    <Outlet />
+                </div>
+
+            </div>
+
         </div>
-    );
+    )
 }
 
-export default AdminLayout;
+/* ================= STYLE ================= */
+
+const styles = {
+
+    container: {
+        display: "flex",
+        minHeight: "100vh",
+        background: "#f4f6f8",
+        fontFamily: "Arial"
+    },
+
+    sidebar: {
+        width: 240,
+        background: "#111827",
+        color: "white",
+        padding: 20,
+        transition: ".3s"
+    },
+
+    sidebarHide: {
+        marginLeft: -240
+    },
+
+    logo: {
+        fontSize: 22,
+        fontWeight: "bold",
+        marginBottom: 30,
+        color: "#ff3b3b"
+    },
+
+    link: {
+        display: "block",
+        padding: "12px 14px",
+        borderRadius: 8,
+        color: "#cbd5e1",
+        textDecoration: "none",
+        marginBottom: 6
+    },
+
+    active: {
+        background: "#e11d48",
+        color: "white",
+        fontWeight: 600
+    },
+
+    main: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    topbar: {
+        height: 60,
+        background: "white",
+        display: "flex",
+        alignItems: "center",
+        padding: "0 20px",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
+    },
+
+    menuBtn: {
+        fontSize: 20,
+        border: 0,
+        background: "transparent",
+        cursor: "pointer",
+        marginRight: 20
+    },
+
+    search: {
+        flex: 1,
+        padding: 8,
+        borderRadius: 6,
+        border: "1px solid #ddd"
+    },
+
+    user: {
+        marginLeft: 20,
+        fontWeight: 600
+    },
+
+    content: {
+        padding: 25
+    }
+}

@@ -1,122 +1,133 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import "./Internet.css"
+import { useNavigate } from "react-router-dom"
 
-const CardInternet = ({ data }) => {
+const CardInternet = ({ data, isAdmin, onEdit, onDelete, onRegister }) => {
 
-  // ⭐ mặc định chọn tỉnh
+  const navigate = useNavigate()
+
   const [area, setArea] = useState("tinh")
 
-  const price =
-    area === "hn"
-      ? data.price_hn
-      : data.price_tinh
+  let price = null
+
+  if (area === "hn" && data.price_hn)
+    price = Number(data.price_hn)
+
+  if (area === "tinh" && data.price_tinh)
+    price = Number(data.price_tinh)
 
   return (
-    <div className="internet-card">
+    <div
+      className="vt-card"
+      onClick={() => navigate("/internet/" + data._id)}
+      style={{ cursor: "pointer" }}
+    >
 
-      {/* SPEED */}
-      <div className="internet-speed-section">
-        <span className="speed-amount">
-          {data.speed}
-        </span>
-      </div>
+      <div className="vt-content">
 
-      {/* NAME */}
-      <div className="card-top">
-        <h3 className="internet-plan-title">
-          {data.name}
-        </h3>
-      </div>
-
-      {/* FEATURES */}
-      <div className="internet-features-section">
-
-        {/* MODEM */}
-        {data.modem && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              1 Modem {data.modem}
-            </span>
-          </div>
-        )}
-
-        {/* MESH */}
-        {data.mesh && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              + 1 Mesh Wifi
-            </span>
-          </div>
-        )}
-
-        {/* DESCRIPTION */}
-        {data.description && (
-          <div className="internet-feature-row">
-            <span className="internet-feature-text">
-              {data.description}
-            </span>
-          </div>
-        )}
-
-      </div>
-
-      {/* AREA */}
-      <div className="internet-feature-row">
-        <span className="internet-feature-text">
-          Khu vực lắp đặt
-        </span>
-
-        <div style={{ marginTop: 5 }}>
-          <label style={{ marginRight: 15 }}>
-            <input
-              type="radio"
-              checked={area === "hn"}
-              onChange={() => setArea("hn")}
-            />
-            HN & TP.HCM
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              checked={area === "tinh"}
-              onChange={() => setArea("tinh")}
-            />
-            Tỉnh/TP khác
-          </label>
-        </div>
-      </div>
-
-      <div className="internet-divider" />
-
-      {/* PRICE */}
-      <div className="internet-price-section">
-
-        <span className="price-label">
-          Đơn giá
-        </span>
-
-        <div className="price-display">
-          <span className="price-amount">
-            {price?.toLocaleString()}
-          </span>
-          <span className="price-unit">
-            đ/tháng
-          </span>
+        {/* HEADER */}
+        <div className="vt-header">
+          <div className="vt-name">{data.name}</div>
+          <div className="vt-speed">{data.speed}</div>
         </div>
 
-      </div>
+        <div className="vt-line" />
 
-      {/* ACTION */}
-      <div className="internet-action-section">
+        {/* FEATURE */}
+        <div className="vt-block">
+          <div className="vt-label">Tiện ích</div>
+          <div className="vt-value">
+            {data.description || "1 Modem Wifi 6"}
+          </div>
+        </div>
 
-        <button className="internet-btn internet-red-btn">
-          Đăng ký
-        </button>
+        {/* AREA */}
+        <div className="vt-block">
+          <div className="vt-label">Khu vực lắp đặt</div>
 
-        <button className="internet-btn internet-white-btn">
-          Chi tiết gói cước
-        </button>
+          <div className="vt-radio">
+
+            <label onClick={(e) => e.stopPropagation()}>
+              <input
+                type="radio"
+                checked={area === "hn"}
+                onChange={(e) => {
+                  e.stopPropagation()
+                  setArea("hn")
+                }}
+              />
+              HN & TP.HCM
+            </label>
+
+            <label onClick={(e) => e.stopPropagation()}>
+              <input
+                type="radio"
+                checked={area === "tinh"}
+                onChange={(e) => {
+                  e.stopPropagation()
+                  setArea("tinh")
+                }}
+              />
+              Tỉnh/TP khác
+            </label>
+
+          </div>
+        </div>
+
+        <div className="vt-line" />
+
+        {/* PRICE */}
+        <div
+          className="vt-price-box"
+          onClick={(e) => e.stopPropagation()}
+        >
+
+          <div className="vt-price-label">ĐƠN GIÁ</div>
+
+          {price && (
+            <div className="vt-price">
+              {price.toLocaleString()}đ/tháng
+            </div>
+          )}
+
+          <button
+            className="vt-btn-register"
+            onClick={(e) => {
+              e.stopPropagation()
+
+              onRegister && onRegister(data)
+            }}
+          >
+            ĐĂNG KÝ
+          </button>
+
+        </div>
+
+        {/* ADMIN */}
+        {isAdmin && (
+          <div
+            className="vt-admin"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit(data)
+              }}
+            >
+              Sửa
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(data._id)
+              }}
+            >
+              Xóa
+            </button>
+          </div>
+        )}
 
       </div>
 

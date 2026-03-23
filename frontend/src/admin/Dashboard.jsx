@@ -1,5 +1,4 @@
 
-import "./Admin.css";
 
 const mockStats = [
     { label: "Tổng gói cước", value: "247", trend: "+12%" },

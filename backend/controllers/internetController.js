@@ -15,3 +15,23 @@ exports.delete = async (req, res) => {
     await InternetPackage.findByIdAndDelete(req.params.id)
     res.json({ message: "Deleted" })
 }
+exports.update = async (req, res) => {
+    const data = await InternetPackage.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+    )
+    res.json(data)
+}
+
+exports.remove = async (req, res) => {
+    await InternetPackage.findByIdAndDelete(req.params.id)
+    res.json({ message: "deleted" })
+}
+exports.getById = async (req, res) => {
+    const data = await InternetPackage
+        .findById(req.params.id)
+        .populate("category")
+
+    res.json(data)
+}

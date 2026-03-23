@@ -1,5 +1,6 @@
 const router = require("express").Router()
 const InternetCategory = require("../models/InternetCategory")
+const InternetPackage = require("../models/InternetPackage")
 
 // GET ALL
 router.get("/", async (req, res) => {
@@ -13,11 +14,28 @@ router.post("/", async (req, res) => {
     await item.save()
     res.json(item)
 })
-
 // DELETE
 router.delete("/:id", async (req, res) => {
-    await InternetCategory.findByIdAndDelete(req.params.id)
-    res.json({ message: "Deleted" })
-})
+    try {
 
+        // ⭐ kiểm tra có gói thuộc danh mục không
+        const used = await InternetPackage.findOne({
+            category: req.params.id
+        })
+
+        if (used) {
+            return res.status(400).json({
+                message: "Danh mục đang có gói internet"
+            })
+        }
+
+        await InternetCategory.findByIdAndDelete(req.params.id)
+
+        res.json({ message: "Deleted" })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: "Server error" })
+    }
+})
 module.exports = router
