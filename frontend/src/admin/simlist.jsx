@@ -224,11 +224,11 @@ const SimList = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
-                <th style={{ padding: '12px' }}>STT</th><th style={{ padding: '12px' }}>Số SIM</th><th style={{ padding: '12px' }}>Phân loại</th><th style={{ padding: '12px' }}>Giá tiền</th><th style={{ padding: '12px' }}>Thao tác</th>
+                <th style={{ padding: '12px' }}>STT</th><th style={{ padding: '12px' }}>Số SIM</th><th style={{ padding: '12px' }}>Phân loại</th><th style={{ padding: '12px' }}>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              {sims.length > 0 ? sims.map((simData) => <Sim key={simData._id} sim={simData} onDelete={handleDelete} />) : <tr><td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Không có số SIM nào trong mục này.</td></tr>}
+              {sims.length > 0 ? sims.map((simData) => <Sim key={simData._id} sim={simData} onDelete={handleDelete} />) : <tr><td colSpan="4" style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Không có số SIM nào trong mục này.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -297,10 +297,10 @@ const SimList = () => {
             </div>
             <div style={{ flex: 1, overflowY: 'auto', border: '1px solid #eee' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead><tr style={{ background: '#f8f9fa' }}><th>STT (Tạm)</th><th>Số SIM</th><th>Phân loại</th><th>Giá tiền</th></tr></thead>
+                <thead><tr style={{ background: '#f8f9fa' }}><th>STT (Tạm)</th><th>Số SIM</th><th>Phân loại</th></tr></thead>
                 <tbody>
                   {activePreviewList.length > 0 ? activePreviewList.map((item, index) => (
-                    <tr key={index}><td>{item.stt}</td><td style={{fontWeight: 'bold', color: '#e5002b'}}>{item.soSim}</td><td>{item.type === 'thuong' ? 'VIP Thường' : 'VIP Đẹp'}</td><td>{item.price}</td></tr>
+                    <tr key={index}><td>{item.stt}</td><td style={{fontWeight: 'bold', color: '#e5002b'}}>{item.soSim}</td><td>{item.type === 'thuong' ? 'VIP Thường' : 'VIP Đẹp'}</td></tr>
                   )) : <tr><td colSpan="4" style={{ textAlign: 'center' }}>Không có SIM nào.</td></tr>}
                 </tbody>
               </table>

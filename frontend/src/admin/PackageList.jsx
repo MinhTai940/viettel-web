@@ -34,11 +34,15 @@ function PackageList() {
             const catRes = await API.get("/categories")
             const pkgRes = await API.get("/packages")
 
-            setCategories(catRes.data)
-            setPackages(pkgRes.data)
+            setCategories(Array.isArray(catRes.data) ? catRes.data : [])
+            setPackages(Array.isArray(pkgRes.data) ? pkgRes.data : [])
+
+            console.log("✅ Packages loaded:", pkgRes.data)
 
         } catch (err) {
-            console.log(err)
+            console.log("❌ Load error:", err)
+            setPackages([])
+            setCategories([])
         }
 
         setLoading(false)
@@ -88,6 +92,8 @@ function PackageList() {
     // ================= FILTER =================
     const filteredPackages = packages.filter(pkg => {
 
+        if (!pkg || !pkg.category) return false
+
         const categoryId =
             typeof pkg.category === "object"
                 ? pkg.category?._id
@@ -97,7 +103,7 @@ function PackageList() {
             selectedCategory ? categoryId === selectedCategory : true
 
         const matchSearch =
-            pkg.name?.toLowerCase().includes(search.toLowerCase())
+            pkg.name?.toLowerCase().includes(search.toLowerCase()) ?? true
 
         return matchCategory && matchSearch
     })
@@ -106,6 +112,8 @@ function PackageList() {
     const categoryGroups = categories.map(category => {
 
         const groupPackages = filteredPackages.filter(pkg => {
+
+            if (!pkg.category) return false
 
             const categoryId =
                 typeof pkg.category === "object"
@@ -152,7 +160,7 @@ function PackageList() {
                     </div>
 
                     <p className="card-subtitle">
-                        {loading ? "Đang tải..." : `${filteredPackages.length} gói`}
+                        {loading ? "Đang tải..." : `${filteredPackages.length} gói cước`}
                     </p>
 
                 </div>

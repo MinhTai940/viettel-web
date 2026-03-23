@@ -20,8 +20,6 @@ const Sim = ({ sim, onDelete }) => {
         )}
       </td>
       
-      <td style={{ padding: '12px' }}>{sim.price}</td>
-      
       <td style={{ padding: '12px' }}>
         {/* Khi bấm xóa, nó sẽ gọi ngược lên hàm onDelete của thằng Cha */}
         <button 

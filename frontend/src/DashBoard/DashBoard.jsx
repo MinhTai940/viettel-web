@@ -93,7 +93,7 @@ const DashBoard = () => {
                   {childCategories.map(child => {
 
                     const childPackages = packages.filter(
-                      p => p.category === child._id
+                      p => p.category && p.category._id === child._id
                     );
 
                     if (childPackages.length === 0) return null;
