@@ -7,7 +7,7 @@
 }
 
 .vt-card {
-  width: 450px;
+  width: 400px;
   max-width: 100%;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(20px);
@@ -329,4 +329,98 @@
   color: #666;
   font-size: 16px;
   margin-bottom: 40px;
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  width: 420px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.popup-box input,
+.popup-box select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-outline {
+  flex: 1;
+  border: 2px solid red;
+  background: white;
+  padding: 12px;
+  border-radius: 30px;
+  color: red;
+}
+
+.btn-primary {
+  flex: 1;
+  border: none;
+  background: red;
+  color: white;
+  padding: 12px;
+  border-radius: 30px;
+}
+
+.internet-hero {
+  max-width: 1500px;
+  /* ⭐ giới hạn chiều ngang */
+  margin: 20px auto;
+  /* ⭐ căn giữa */
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.internet-hero img {
+  width: 100%;
+  height: 400px;
+  /* ⭐ chỉnh chiều cao banner */
+  object-fit: cover;
+  /* ⭐ không méo ảnh */
+  display: block;
+}
+
+.internet-hero1 {
+  max-width: 1500px;
+  /* ⭐ giới hạn chiều ngang */
+  margin: 20px auto;
+  /* ⭐ căn giữa */
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.internet-hero1 img {
+  width: 100%;
+  height: 400px;
+  /* ⭐ chỉnh chiều cao banner */
+  object-fit: cover;
+  /* ⭐ không méo ảnh */
+  display: block;
 }

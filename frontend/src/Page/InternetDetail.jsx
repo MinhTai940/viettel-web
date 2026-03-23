@@ -5,6 +5,7 @@ import Header from "../DashBoard/Header"
 import Footer from "../DashBoard/Footer"
 import "./InternetDetail.css"
 import CardInternet from "./CardInternet"
+import RegisterPopup from "./RegisterPopup"
 
 const InternetDetail = () => {
 
@@ -13,6 +14,7 @@ const InternetDetail = () => {
     const [plan, setPlan] = useState(null)
     const [loading, setLoading] = useState(true)
     const [relatedPlans, setRelatedPlans] = useState([])
+    const [openPopup, setOpenPopup] = useState(false)
 
     useEffect(() => {
         loadDetail()
@@ -69,6 +71,14 @@ const InternetDetail = () => {
                     />
 
                 </div>
+                <div style={{ textAlign: "left", marginTop: 30 }}>
+                    <button
+                        className="internet-red-btn"
+                        onClick={() => setOpenPopup(true)}
+                    >
+                        Đăng ký ngay
+                    </button>
+                </div>
                 {relatedPlans.length > 0 && (
 
                     <div className="related-section">
@@ -88,6 +98,11 @@ const InternetDetail = () => {
                 )}
 
             </div>
+            <RegisterPopup
+                open={openPopup}
+                onClose={() => setOpenPopup(false)}
+                plan={plan}
+            />
 
             <Footer />
         </>

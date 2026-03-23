@@ -2,16 +2,19 @@ import { useState } from "react"
 import "./Internet.css"
 import { useNavigate } from "react-router-dom"
 
-const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
+const CardInternet = ({ data, isAdmin, onEdit, onDelete, onRegister }) => {
 
   const navigate = useNavigate()
 
   const [area, setArea] = useState("tinh")
 
-  const price =
-    area === "hn"
-      ? Number(data.price_hn)
-      : Number(data.price_tinh)
+  let price = null
+
+  if (area === "hn" && data.price_hn)
+    price = Number(data.price_hn)
+
+  if (area === "tinh" && data.price_tinh)
+    price = Number(data.price_tinh)
 
   return (
     <div
@@ -81,16 +84,18 @@ const CardInternet = ({ data, isAdmin, onEdit, onDelete }) => {
 
           <div className="vt-price-label">ĐƠN GIÁ</div>
 
-          <div className="vt-price">
-            {price?.toLocaleString()}đ/tháng
-          </div>
+          {price && (
+            <div className="vt-price">
+              {price.toLocaleString()}đ/tháng
+            </div>
+          )}
 
           <button
             className="vt-btn-register"
             onClick={(e) => {
               e.stopPropagation()
 
-              alert("Đăng ký gói " + data.name)
+              onRegister && onRegister(data)
             }}
           >
             ĐĂNG KÝ

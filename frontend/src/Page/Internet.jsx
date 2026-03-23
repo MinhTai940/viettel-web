@@ -4,7 +4,9 @@ import CardInternet from "./CardInternet";
 import Header from "../DashBoard/Header";
 import Footer from "../DashBoard/Footer";
 import API from "../services/api";
-
+import RegisterPopup from "./RegisterPopup"
+import banner from "../assets/baner.png"
+import banner2 from "../assets/banner2.png"
 const CATEGORY_NAME = "Internet lắp đặt";
 // ⭐ ĐỔI lại đúng tên category Internet trong Admin
 
@@ -12,6 +14,8 @@ const Internet = () => {
 
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openPopup, setOpenPopup] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState(null)
 
   useEffect(() => {
     loadInternetPlans();
@@ -65,7 +69,9 @@ const Internet = () => {
     <div className="internet-page-wrapper">
 
       <Header />
-
+      <div className="internet-hero">
+        <img src={banner} alt="banner" />
+      </div>
       <main className="internet-container">
 
 
@@ -98,7 +104,14 @@ const Internet = () => {
                 <div className="internet-grid">
 
                   {groupedPlans[cate].map(p => (
-                    <CardInternet key={p._id} data={p} />
+                    <CardInternet
+                      key={p._id}
+                      data={p}
+                      onRegister={(plan) => {
+                        setSelectedPlan(plan)
+                        setOpenPopup(true)
+                      }}
+                    />
                   ))}
 
                 </div>
@@ -107,10 +120,17 @@ const Internet = () => {
 
             ))}
           </>
-
         )}
 
       </main>
+      <RegisterPopup
+        open={openPopup}
+        onClose={() => setOpenPopup(false)}
+        plan={selectedPlan}
+      />
+      <div className="internet-hero1">
+        <img src={banner2} alt="banner2" />
+      </div>
 
       <Footer />
 
