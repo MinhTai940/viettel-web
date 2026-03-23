@@ -180,7 +180,6 @@ const CardSim = ({ stt, soSim }) => {
                 </div>
               )}
             </div>
-
             <div style={{
               marginBottom: '20px',
               padding: '16px',
