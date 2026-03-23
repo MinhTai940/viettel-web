@@ -1,67 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import './Header.css';
-import { Link, useLocation } from 'react-router-dom'; // Đã thêm useLocation vào đây
-import viettelLogo from '../assets/viettel-logo.jpg';
-import API from '../services/api';
+import React, { useEffect, useState } from 'react'
+import './Header.css'
+import { Link, useLocation } from 'react-router-dom'
+import viettelLogo from '../assets/viettel-logo.jpg'
+import API from '../services/api'
 
 const Header = () => {
 
-  const [categories, setCategories] = useState([]);
-  const [openParent, setOpenParent] = useState(null);
-  
-  // Bật "radar" để lấy đường dẫn hiện tại (ví dụ: '/' hoặc '/sim')
-  const location = useLocation();
+  const [categories, setCategories] = useState([])
+  const [openParent, setOpenParent] = useState(null)
+
+  const location = useLocation()
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    fetchCategories()
+  }, [])
 
   const fetchCategories = async () => {
     try {
-      const res = await API.get("/categories");
-      setCategories(res.data);
+      const res = await API.get("/categories")
+      setCategories(res.data)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
-  // scroll tới section
-  const scrollToSection = (e, id) => {
-    e.preventDefault();
-    const section = document.getElementById(id);
-
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id)
     if (section) {
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      section.scrollIntoView({ behavior: "smooth", block: "start" })
     }
-  };
+  }
 
-  // scroll lên đầu trang
-  const scrollToTop = (e) => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   const toggleParent = (id) => {
-    setOpenParent(openParent === id ? null : id);
-  };
+    setOpenParent(openParent === id ? null : id)
+  }
 
-  const parentCategories = categories.filter(c => !c.parent);
+  const parentCategories = categories.filter(c => !c.parent)
 
   return (
     <header className="header">
 
       {/* LOGO */}
-      <div
-        className="logo-container"
-        style={{ cursor: 'pointer' }}
-        onClick={scrollToTop}
-      >
-        <Link to="/">
+      <div className="logo-container" style={{ cursor: 'pointer' }}>
+        <Link to="/" onClick={scrollToTop}>
           <img src={viettelLogo} alt="Viettel Logo" className="logo-img" />
         </Link>
       </div>
@@ -70,12 +55,11 @@ const Header = () => {
       <nav className="nav-menu">
         <ul className="nav-links">
 
-          {/* TRANG CHỦ: Sẽ bôi đỏ và in đậm nếu location.pathname === '/' */}
           <li>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               onClick={scrollToTop}
-              style={{ 
+              style={{
                 color: location.pathname === '/' ? '#e5002b' : '#333',
                 fontWeight: location.pathname === '/' ? 'bold' : 'normal'
               }}
@@ -84,23 +68,22 @@ const Header = () => {
             </Link>
           </li>
 
-          {/* INTERNET: Sẽ bôi đỏ và in đậm nếu location.pathname === '/internet' */}
           <li>
-            <Link 
-              to="/internet" 
-              style={{ 
+            <Link
+              to="/internet"
+              style={{
                 color: location.pathname === '/internet' ? '#e5002b' : '#333',
-                fontWeight: location.pathname === '/internet' ? 'bold' : 'normal' 
+                fontWeight: location.pathname === '/internet' ? 'bold' : 'normal'
               }}
             >
               Internet
             </Link>
           </li>
-          {/* SIM: Sẽ bôi đỏ và in đậm nếu location.pathname === '/sim' */}
+
           <li>
-            <Link 
+            <Link
               to="/sim"
-              style={{ 
+              style={{
                 color: location.pathname === '/sim' ? '#e5002b' : '#333',
                 fontWeight: location.pathname === '/sim' ? 'bold' : 'normal'
               }}
@@ -109,12 +92,13 @@ const Header = () => {
             </Link>
           </li>
 
-          {/* DROP-DOWN GÓI CƯỚC (Giữ nguyên của mày) */}
+          {/* DROPDOWN */}
           <li className="dropdown">
-            <a
-              href="#"
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-              onClick={(e) => e.preventDefault()}
+
+            <button
+              type="button"
+              className="menu-btn"
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Gói cước
               <svg width="14" height="14" viewBox="0 0 24 24"
@@ -126,67 +110,76 @@ const Header = () => {
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
-            </a>
+            </button>
 
             <ul className="dropdown-menu">
               {parentCategories.map(parent => {
+
                 const childCategories = categories.filter(
                   c => c.parent === parent._id
-                );
+                )
 
                 return (
                   <li key={parent._id}>
-                    {/* CLICK CHA */}
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleParent(parent._id);
-                      }}
+
+                    <button
+                      type="button"
+                      onClick={() => toggleParent(parent._id)}
                       style={{
                         fontWeight: "bold",
                         display: "flex",
-                        justifyContent: "space-between"
+                        justifyContent: "space-between",
+                        background: "none",
+                        border: "none",
+                        width: "100%",
+                        cursor: "pointer"
                       }}
                     >
                       {parent.name}
                       <span>
                         {openParent === parent._id ? "▲" : "▼"}
                       </span>
-                    </a>
+                    </button>
 
-                    {/* HIỂN THỊ CON */}
                     {openParent === parent._id && (
                       <ul style={{ paddingLeft: 15 }}>
                         {childCategories.map(child => {
+
                           const childId = child.name
                             .toLowerCase()
-                            .replace(/\s+/g, '-');
+                            .replace(/\s+/g, '-')
 
                           return (
                             <li key={child._id}>
-                              <a
-                                href={`#${childId}`}
-                                onClick={(e) => scrollToSection(e, childId)}
+                              <button
+                                type="button"
+                                onClick={() => scrollToSection(childId)}
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  cursor: "pointer"
+                                }}
                               >
                                 └ {child.name}
-                              </a>
+                              </button>
                             </li>
                           )
                         })}
                       </ul>
                     )}
+
                   </li>
                 )
               })}
             </ul>
+
           </li>
 
         </ul>
       </nav>
 
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

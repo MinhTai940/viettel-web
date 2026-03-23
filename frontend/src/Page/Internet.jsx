@@ -7,7 +7,6 @@ import API from "../services/api";
 import RegisterPopup from "./RegisterPopup"
 import banner from "../assets/baner.png"
 import banner2 from "../assets/banner2.png"
-const CATEGORY_NAME = "Internet lắp đặt";
 // ⭐ ĐỔI lại đúng tên category Internet trong Admin
 
 const Internet = () => {
