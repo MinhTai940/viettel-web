@@ -1,0 +1,426 @@
+/* Pro UI Upgrade for Viettel Internet Cards - Modern Glassmorphism & Animations */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.vt-card {
+  width: 400px;
+  max-width: 100%;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(204, 0, 0, 0.2);
+  padding: 34px 14px;
+  border-radius: 34px;
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 25px 50px -12px rgba(204, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardSlideIn 0.6s ease-out;
+}
+
+.vt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #CC0000, #FF6600, #CC0000);
+  border-radius: 24px 24px 0 0;
+}
+
+.vt-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 35px 70px -20px rgba(204, 0, 0, 0.4),
+    0 0 0 1px rgba(204, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vt-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 8px 16px rgba(204, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.vt-card:hover .vt-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.vt-content {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 26px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.vt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.vt-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  border-left: 4px solid #CC0000;
+  padding-left: 12px;
+  line-height: 1.3;
+}
+
+.vt-speed {
+  font-size: 22px;
+  color: #666;
+  font-weight: 600;
+  background: rgba(204, 0, 0, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.vt-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #CC0000, transparent);
+  margin: 12px 0;
+  border-radius: 2px;
+}
+
+.vt-block {
+  text-align: left;
+  margin-top: 12px;
+}
+
+.vt-label {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.vt-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.vt-radio {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.vt-radio input[type="radio"] {
+  accent-color: #CC0000;
+  width: 20px;
+  height: 20px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.vt-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(204, 0, 0, 0.1);
+}
+
+.vt-price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #CC0000;
+  text-shadow: 0 2px 4px rgba(204, 0, 0, 0.2);
+}
+
+.vt-btn {
+  background: linear-gradient(135deg, #CC0000 0%, #B30000 50%, #990000 100%);
+  color: #fff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(204, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vt-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.vt-btn:hover::before {
+  left: 100%;
+}
+
+.vt-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(204, 0, 0, 0.4);
+}
+
+.vt-btn:active {
+  transform: translateY(0);
+}
+
+.vt-admin {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  opacity: 0.7;
+}
+
+.vt-admin button {
+  background: none;
+  border: 1px solid #CC0000;
+  color: #CC0000;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.vt-admin button:hover {
+  background: #CC0000;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vt-card {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  .vt-name {
+    font-size: 1.2rem;
+  }
+
+  .vt-price {
+    font-size: 1.4rem;
+  }
+}
+
+/* Grid Layout Suggestion */
+.internet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.vt-card.loading {
+  animation: pulse 1.5s infinite;
+}
+
+.vt-price-box {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.vt-price-label {
+  font-size: 12px;
+  color: #999;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.vt-price {
+  font-size: 26px;
+  font-weight: 700;
+  color: #e60012;
+  margin-bottom: 14px;
+}
+
+.vt-btn-register {
+  background: linear-gradient(180deg, #ff1a1a, #d90000);
+  color: white;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(230, 0, 18, .35);
+  transition: .2s;
+}
+
+.vt-btn-register:hover {
+  transform: translateY(-2px);
+}
+
+.internet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.internet-section {
+  margin-bottom: 80px;
+}
+
+.internet-section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.internet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.internet-section-desc {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  width: 420px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.popup-box input,
+.popup-box select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-outline {
+  flex: 1;
+  border: 2px solid red;
+  background: white;
+  padding: 12px;
+  border-radius: 30px;
+  color: red;
+}
+
+.btn-primary {
+  flex: 1;
+  border: none;
+  background: red;
+  color: white;
+  padding: 12px;
+  border-radius: 30px;
+}
+
+.internet-hero {
+  max-width: 1500px;
+  /* ⭐ giới hạn chiều ngang */
+  margin: 20px auto;
+  /* ⭐ căn giữa */
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.internet-hero img {
+  width: 100%;
+  height: 400px;
+  /* ⭐ chỉnh chiều cao banner */
+  object-fit: cover;
+  /* ⭐ không méo ảnh */
+  display: block;
+}
+
+.internet-hero1 {
+  max-width: 1500px;
+  /* ⭐ giới hạn chiều ngang */
+  margin: 20px auto;
+  /* ⭐ căn giữa */
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.internet-hero1 img {
+  width: 100%;
+  height: 400px;
+  /* ⭐ chỉnh chiều cao banner */
+  object-fit: cover;
+  /* ⭐ không méo ảnh */
+  display: block;
+}

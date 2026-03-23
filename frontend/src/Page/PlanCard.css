@@ -1,0 +1,156 @@
+/* src/Page/PlanCard.css */
+
+.plan-card {
+  width: 250px;
+  padding: 40px 20px 20px;
+
+  border-radius: 18px;
+  border: 1px solid #ffe6eb;
+
+  box-shadow: 0 4px 15px rgba(220, 20, 60, 0.08);
+
+  background: white;
+
+  text-align: center;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+/* HEADER */
+
+.plan-name {
+  position: absolute;
+
+  top: -18px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: white;
+
+  padding: 6px 24px;
+
+  border-radius: 30px;
+
+  border: 1px solid #eef0f4;
+
+  font-size: 20px;
+  font-weight: 900;
+}
+
+/* DATA */
+
+.plan-data {
+  display: flex;
+
+  align-items: baseline;
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.data-number {
+  font-size: 44px;
+  font-weight: 900;
+
+  color: #e5002b;
+}
+
+.data-duration {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ICON */
+
+.plan-middle-section {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.plan-free-info p {
+  font-size: 14px;
+  color: #666;
+}
+
+.plan-icons-wrapper {
+  display: flex;
+
+  gap: 8px;
+
+  border: 1px solid #e0e0e0;
+
+  border-radius: 30px;
+
+  padding: 6px 12px;
+
+  background: white;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* PRICE */
+
+.plan-price {
+  margin-top: 6px;
+}
+
+.price-number {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.price-unit {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* BUTTON */
+
+.plan-actions {
+  display: flex;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.btn-register,
+.btn-detail {
+
+  padding: 10px 20px;
+
+  border-radius: 22px;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.btn-register {
+  background: #e5002b;
+  color: white;
+  border: none;
+}
+
+.btn-detail {
+  background: white;
+  color: #e5002b;
+
+  border: 1px solid #e5002b;
+}

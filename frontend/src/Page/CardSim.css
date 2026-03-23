@@ -1,0 +1,292 @@
+.sim-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(245,247,250,0.85) 50%, rgba(229,0,43,0.08) 100%);
+  backdrop-filter: blur(25px) saturate(130%);
+  -webkit-backdrop-filter: blur(25px) saturate(130%);
+  border-radius: 28px;
+  padding: 28px 36px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(229,0,43,0.2);
+  transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow: 
+    0 12px 48px rgba(0,0,0,0.15),
+    0 4px 20px rgba(229,0,43,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  min-height: 280px;
+  overflow: hidden;
+}
+
+.sim-card:hover {
+  border-color: rgba(229, 0, 43, 0.4);
+  box-shadow: 
+    0 25px 70px rgba(229, 0, 43, 0.3),
+    0 0 0 1px rgba(229, 0, 43, 0.25),
+    inset 0 1px 0 rgba(255,255,255,1);
+  transform: translateY(-8px) scale(1.03);
+}
+
+/* Nội dung chính */
+.sim-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 280px;
+}
+
+.card-top {
+  margin-bottom: 0;
+}
+
+.badge-5g-corner {
+  background: linear-gradient(135deg, #e5002b, #ff1a47);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 25px rgba(229, 0, 43, 0.4), 0 0 25px rgba(229, 0, 43, 0.35);
+  animation: pulseGlow 2.5s ease-in-out infinite;
+  position: relative;
+}
+
+.badge-5g-corner .badge-text {
+  font-weight: 900;
+  font-size: 20px;
+  font-style: italic;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.badge-5g-corner .badge-wifi {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: 0 8px 25px rgba(229, 0, 43, 0.4), 0 0 25px rgba(229, 0, 43, 0.35);
+  }
+  50% { 
+    box-shadow: 0 8px 25px rgba(229, 0, 43, 0.55), 0 0 35px rgba(229, 0, 43, 0.6);
+  }
+}
+
+.wave-section {
+  position: relative;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+  flex: 1;
+}
+
+.wave-ring {
+  position: absolute;
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box, 
+              conic-gradient(#e5002b, transparent 120deg) border-box;
+  border-radius: 50%;
+  opacity: 0;
+  animation: pulseRing 3.5s ease-in-out infinite;
+}
+
+.wave-ring-1 { width: 70px; height: 70px; animation-delay: 0s; }
+.wave-ring-2 { width: 95px; height: 95px; animation-delay: 0.4s; }
+.wave-ring-3 { width: 120px; height: 120px; animation-delay: 0.8s; }
+.wave-ring-4 { width: 145px; height: 145px; animation-delay: 1.2s; }
+.wave-ring-5 { width: 170px; height: 170px; animation-delay: 1.6s; }
+
+@keyframes pulseRing {
+  0% { transform: scale(0.7); opacity: 0.2; }
+  40% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.center-5g-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: flex-start;
+  gap: 0px;
+  z-index: 10;
+}
+
+.center-text {
+  font-size: 72px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -4px;
+  color: #e5002b;
+  text-shadow: 
+    0 4px 8px rgba(229,0,43,0.3),
+    2px 2px 0 rgba(255,255,255,0.8),
+    -2px -2px 0 rgba(255,255,255,0.6),
+    0 0 20px rgba(229,0,43,0.2);
+  line-height: 0.85;
+}
+
+.center-wifi {
+  width: 62px;
+  height: 62px;
+  margin-left: -15px;
+  margin-top: -40px;
+  transform: rotate(30deg);
+  flex-shrink: 0;
+  stroke: #e5002b;
+  filter: drop-shadow(0 2px 6px rgba(229,0,43,0.3));
+  border-radius: 35% 65% 50% 50% / 40% 55% 70% 60%;
+}
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px) translate(-50%, -50%); }
+  50% { transform: translateY(-6px) translate(-50%, -50%); }
+}
+
+
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 24px;
+  margin-top: auto;
+  border-top: 1px solid rgba(229, 0, 43, 0.15);
+  gap: 20px;
+}
+
+.sim-info-group {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.sim-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-info .label {
+  font-size: 13px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 3px rgba(255,255,255,1);
+}
+
+.sim-info .value {
+  font-size: 20px;
+  background: linear-gradient(135deg, #e5002b, #ff1744);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.8px;
+}
+
+.contact-btn {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  color: #e5002b;
+  padding: 16px 38px;
+  border-radius: 32px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(229,0,43,0.25);
+  text-transform: uppercase;
+}
+
+.contact-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+  transition: left 0.6s;
+}
+
+.contact-btn:hover {
+  background: linear-gradient(135deg, #e5002b, #ff1a47);
+  color: #ffffff;
+  box-shadow: 
+    0 12px 35px rgba(229,0,43,0.45),
+    0 0 0 1px rgba(229,0,43,0.4);
+  transform: translateY(-4px);
+}
+
+.contact-btn:hover::before {
+  left: 100%;
+}
+
+.contact-btn:active {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .sim-card {
+    padding: 22px 28px;
+    min-height: 250px;
+    margin: 0 4px;
+  }
+  
+  .badge-5g-corner {
+    padding: 10px 14px;
+  }
+  
+  .badge-5g-corner .badge-text {
+    font-size: 18px;
+  }
+  
+  .wave-section {
+    height: 110px;
+  }
+  
+  .center-text {
+    font-size: 60px;
+    letter-spacing: -3px;
+  }
+  
+  .center-wifi {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .sim-info-group {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .sim-info .value {
+    font-size: 18px;
+  }
+  
+  .contact-btn {
+    padding: 14px 32px;
+    font-size: 13px;
+    align-self: flex-end;
+  }
+  
+  .card-bottom {
+    flex-direction: column-reverse;
+    gap: 16px;
+  }
+}
