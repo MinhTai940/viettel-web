@@ -14,7 +14,7 @@ const uploadRoutes = require("./routes/uploadRoutes")
 const internetRoutes = require("./routes/internetRoutes")
 const internetCategoryRoutes = require("./routes/internetCategoryRoutes")
 const simRoutes = require('./routes/simRoutes');
-
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express()
 
@@ -35,6 +35,7 @@ app.use("/api/upload", uploadRoutes)
 app.use("/api/internet", internetRoutes)
 app.use("/api/internet-category", internetCategoryRoutes)
 app.use('/api/sim', simRoutes);
+app.use('/api/contact', contactRoutes);
 
 const PORT = process.env.PORT || 5000
 
