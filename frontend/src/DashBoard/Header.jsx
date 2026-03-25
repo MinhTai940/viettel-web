@@ -8,6 +8,7 @@ const Header = () => {
 
   const [categories, setCategories] = useState([])
   const [openParent, setOpenParent] = useState(null)
+  const [openMenu, setOpenMenu] = useState(false)
 
   const location = useLocation()
 
@@ -50,10 +51,13 @@ const Header = () => {
           <img src={viettelLogo} alt="Viettel Logo" className="logo-img" />
         </Link>
       </div>
+      <div className="menu-toggle" onClick={() => setOpenMenu(!openMenu)}>
+        ☰
+      </div>
 
       {/* MENU */}
       <nav className="nav-menu">
-        <ul className="nav-links">
+        <ul className={`nav-links ${openMenu ? "active" : ""}`}>
 
           <li>
             <Link

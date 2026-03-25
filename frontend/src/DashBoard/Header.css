@@ -6,13 +6,14 @@
   background-color: #fff;
   border-bottom: 1px solid #eaeaea;
   font-family: sans-serif;
-  position: sticky; 
+  position: sticky;
   top: 0;
   z-index: 9999;
 }
 
 .logo-container {
-  flex: 0 0 auto; /* Giữ khung logo cố định bên trái */
+  flex: 0 0 auto;
+  /* Giữ khung logo cố định bên trái */
 }
 
 .logo-img {
@@ -22,9 +23,11 @@
 
 .nav-menu {
   position: absolute;
-  left: 50%; /* Đẩy menu ra giữa màn hình */
-  transform: translateX(-50%); /* Kéo nó giật ngược lại một nửa để nằm cái chóc ngay tâm */
-  
+  left: 50%;
+  /* Đẩy menu ra giữa màn hình */
+  transform: translateX(-50%);
+  /* Kéo nó giật ngược lại một nửa để nằm cái chóc ngay tâm */
+
   /* display: flex;
   justify-content: center; */
 }
@@ -38,7 +41,7 @@
   padding: 0;
 }
 
-.nav-links > li > a {
+.nav-links>li>a {
   text-decoration: none;
   color: #333;
   font-weight: 600;
@@ -56,14 +59,14 @@
   display: none;
   position: absolute;
   top: 100%;
-  left: 50%; 
+  left: 50%;
   transform: translateX(-50%);
   background-color: #fff;
   list-style: none;
   padding: 10px 0;
   margin: 0;
   min-width: 250px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 1000;
 }
