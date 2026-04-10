@@ -241,23 +241,36 @@
 /* BẬT LƯỚT NGANG CHO DANH SÁCH SIM (MOBILE) */
 /* ========================================= */
 @media (max-width: 768px) {
+  /* 1. Triệt tiêu cái khoảng trắng dư bên phải (tràn trang) */
+  .sim-page-wrapper {
+    overflow-x: hidden; 
+    width: 100vw;
+  }
+
+  /* 2. Fix cái thanh Search bị to quá hớp gây tràn màn hình */
+  .search-bar {
+    max-width: 92% !important;
+    margin: 0 auto;
+    padding: 5px 10px;
+  }
+
+  /* 3. XOÁ CÁI KHỐI MÀU XÁM phía sau thẻ SIM */
+  .sim-tab-content {
+    background: transparent !important; /* Ép nó trong suốt */
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
   .cards-grid {
-    display: flex; /* Bỏ Grid, xài Flex */
-    flex-wrap: nowrap; /* Cấm rớt dòng */
-    overflow-x: auto; /* Bật vuốt ngang */
-    gap: 12px; /* Khoảng cách giữa các thẻ */
-    padding-bottom: 20px;
-    
-    scroll-snap-type: x mandatory; /* Hiệu ứng khựng khi vuốt */
-    -webkit-overflow-scrolling: touch;
+    background: transparent !important;
+    padding: 10px 15px 30px 15px !important; /* Chỉ để padding cho lướt ngang thôi */
   }
 
-  /* Ẩn thanh cuộn xấu xí */
-  .cards-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .cards-grid > div {
-    scroll-snap-align: start;
+  /* 4. Fix cái Header (Menu) đang bị chồng chéo lên logo */
+  /* Tao thấy cái logo Viettel của mày đang bị mấy chữ Internet, Trang chủ đè lên */
+  .header-container { /* Thay bằng class header của mày */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
 }
