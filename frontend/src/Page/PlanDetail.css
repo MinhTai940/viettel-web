@@ -136,3 +136,64 @@
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
+
+/* ========================================= */
+/* BỔ SUNG CÁC CLASS CÒN THIẾU               */
+/* ========================================= */
+
+/* Cho phép cái bảng trượt ngang khi bị tràn */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Xếp thẻ PlanCard trên máy tính */
+.related-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* ========================================= */
+/* FIX GIAO DIỆN CHI TIẾT CHO MOBILE         */
+/* ========================================= */
+@media (max-width: 768px) {
+  
+  /* Giảm khoảng cách viền 2 bên cho rộng rãi */
+  .plan-detail-container {
+      padding: 15px; 
+  }
+
+  /* Thu nhỏ chữ tiêu đề */
+  .detail-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+  }
+
+  /* Chuyển 3 cái hộp ngang thành xếp dọc */
+  .detail-box-container {
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  /* Ép danh sách "Gói tương tự" lướt ngang y như trang chủ */
+  .related-grid {
+      flex-wrap: nowrap; /* Cấm rớt dòng */
+      overflow-x: auto; /* Bật cuộn ngang */
+      padding-bottom: 15px;
+      gap: 12px;
+      scroll-snap-type: x mandatory;
+  }
+
+  .related-grid::-webkit-scrollbar {
+      display: none; /* Giấu thanh cuộn */
+  }
+
+  /* Thu nhỏ popup báo đăng ký cho vừa màn đt */
+  .popup-box {
+      width: 90%;
+      padding: 20px;
+  }
+}

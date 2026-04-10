@@ -124,53 +124,51 @@ function PlanDetail() {
             Lựa chọn nâng cao dành riêng cho gói {plan.name}
           </h2>
 
-          <table className="advanced-table">
+          {/* ĐÃ SỬA: Thêm div bọc ngoài để lướt ngang cái bảng trên mobile */}
+          <div className="table-responsive">
+            <table className="advanced-table">
 
-            <thead>
-              <tr>
-                <th>GÓI</th>
-                <th>ƯU ĐÃI</th>
-                <th>ĐƠN GIÁ</th>
-                <th>ĐĂNG KÝ</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {plan.advanced_packages.map((ap, i) => (
-                <tr key={i}>
-
-                  <td>{ap.name}</td>
-
-                  <td>
-                    {ap.data}
-                    <br />
-                    (4GB/ngày)
-                    <br />
-                    Miễn phí TV360
-                    <br />
-                    Miễn phí Mybox
-                  </td>
-
-                  <td>
-                    {Number(ap.price).toLocaleString()}đ
-                    <br />
-                    ({ap.duration})
-                  </td>
-
-                  <td>
-                    <button
-                      className="advanced-register-btn"
-                      onClick={() => setPopup(ap)}
-                    >
-                      Đăng ký
-                    </button>
-                  </td>
-
+              <thead>
+                <tr>
+                  <th>GÓI</th>
+                  <th>ƯU ĐÃI</th>
+                  <th>ĐƠN GIÁ</th>
+                  <th>ĐĂNG KÝ</th>
                 </tr>
-              ))}
-            </tbody>
+              </thead>
 
-          </table>
+              <tbody>
+                {plan.advanced_packages.map((ap, i) => (
+                  <tr key={i}>
+                    <td>{ap.name}</td>
+                    <td>
+                      {ap.data}
+                      <br />
+                      (4GB/ngày)
+                      <br />
+                      Miễn phí TV360
+                      <br />
+                      Miễn phí Mybox
+                    </td>
+                    <td>
+                      {Number(ap.price).toLocaleString()}đ
+                      <br />
+                      ({ap.duration})
+                    </td>
+                    <td>
+                      <button
+                        className="advanced-register-btn"
+                        onClick={() => setPopup(ap)}
+                      >
+                        Đăng ký
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+          </div> {/* Đóng thẻ table-responsive */}
 
         </div>
       )}
