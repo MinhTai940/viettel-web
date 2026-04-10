@@ -243,8 +243,9 @@
 @media (max-width: 768px) {
   /* 1. Triệt tiêu cái khoảng trắng dư bên phải (tràn trang) */
   .sim-page-wrapper {
-    overflow-x: hidden; 
+    overflow-x: hidden !important; 
     width: 100vw;
+    background-color: #f8fbfc;
   }
 
   /* 2. Fix cái thanh Search bị to quá hớp gây tràn màn hình */
@@ -257,13 +258,21 @@
   /* 3. XOÁ CÁI KHỐI MÀU XÁM phía sau thẻ SIM */
   .sim-tab-content {
     background: transparent !important; /* Ép nó trong suốt */
+    background-color: transparent !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
   .cards-grid {
-    background: transparent !important;
-    padding: 10px 15px 30px 15px !important; /* Chỉ để padding cho lướt ngang thôi */
+    display: flex !important; /* Buộc phải là Flex để lướt ngang */
+    flex-wrap: nowrap !important; /* Tuyệt đối không cho xuống hàng */
+    overflow-x: auto !important; /* Bật cuộn ngang */
+    gap: 15px !important;
+    padding: 10px 15px 30px 15px !important;
+    background: transparent !important; /* Xoá màu nền xám */
+    
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* 4. Fix cái Header (Menu) đang bị chồng chéo lên logo */
@@ -273,4 +282,8 @@
     justify-content: center;
     gap: 10px;
   }
+  .sim-card {
+  flex: 0 0 auto !important; /* CẤM trình duyệt bóp nhỏ card lại */
+  width: 165px; /* Chiều rộng mày muốn cho card trên mobile */
+}
 }
