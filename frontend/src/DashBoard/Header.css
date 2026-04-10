@@ -1,93 +1,219 @@
+/* ========================================= */
+/* 1. CSS CHUNG & RESET (DÙNG CHO TẤT CẢ)    */
+/* ========================================= */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 200px;
+  padding: 10px 5% !important; /* Dùng % để tự co giãn linh hoạt */
   background-color: #fff;
   border-bottom: 1px solid #eaeaea;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
   position: sticky;
   top: 0;
   z-index: 9999;
 }
 
-.logo-container {
-  flex: 0 0 auto;
-  /* Giữ khung logo cố định bên trái */
+.logo-container { flex: 0 0 auto; cursor: pointer; }
+.logo-img { height: 70px; width: auto; }
+
+.nav-links, .dropdown-menu, .child-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.logo-img {
-  height: 80px;
-  width: auto;
+.text-red { color: #e60028 !important; }
+.bold { font-weight: bold !important; }
+
+/* ========================================= */
+/* 2. GIAO DIỆN DESKTOP (MÀN HÌNH > 768px)    */
+/* ========================================= */
+@media (min-width: 769px) {
+  .menu-toggle { display: none; }
+
+  .nav-menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+  }
+
+  .nav-links > li > a, .menu-btn {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s;
+  }
+
+  .nav-links > li > a:hover, .menu-btn:hover { color: #e60028; }
+
+  /* --- DROPDOWN DESKTOP SIÊU ĐẸP --- */
+  .dropdown { position: relative; }
+  .dropdown:hover .dropdown-menu { 
+    display: block; 
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #fff;
+    min-width: 350px; /* Độ rộng thoải mái */
+    padding: 15px 0 !important;
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); /* Đổ bóng sang xịn */
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Mũi tên chỉ lên */
+  .dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+  }
+
+  /* Mục Cha trong Dropdown */
+  .parent-item { padding: 5px 0; }
+  .parent-btn {
+    width: 100%;
+    padding: 12px 25px !important;
+    text-align: left;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a;
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  /* Mục Con (Thụt lề Tab) */
+  .child-list {
+    padding-left: 20px !important; /* Tab vô một cái */
+    margin: 5px 15px !important;
+    border-left: 2px solid #f0f0f0; /* Đường kẻ dọc tinh tế */
+  }
+
+  .child-btn {
+    width: 100%;
+    padding: 8px 20px !important;
+    text-align: left;
+    font-size: 14px !important;
+    color: #666;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .child-btn:hover {
+    color: #e60028;
+    background-color: #fff5f6;
+    border-radius: 4px;
+  }
 }
 
-.nav-menu {
-  position: absolute;
-  left: 50%;
-  /* Đẩy menu ra giữa màn hình */
-  transform: translateX(-50%);
-  /* Kéo nó giật ngược lại một nửa để nằm cái chóc ngay tâm */
+/* ========================================= */
+/* 3. GIAO DIỆN MOBILE (MÀN HÌNH <= 768px)   */
+/* ========================================= */
+@media (max-width: 768px) {
+  /* 1. Header & Logo - Đảm bảo không bị đè */
+  .header {
+    padding: 10px 15px !important;
+    position: relative !important;
+    height: 70px;
+  }
 
-  /* display: flex;
-  justify-content: center; */
-}
+  .logo-img { height: 45px !important; }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
-}
+  /* 2. Nav Menu - Xổ xuống từ Header */
+  .nav-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    width: 100% !important;
+    background-color: #fff !important;
+    display: none;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+    border-top: 1px solid #eee;
+  }
 
-.nav-links>li>a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-  font-size: 15px;
-  padding: 15px 0;
-  display: flex;
-  align-items: center;
-}
+  .nav-menu.active { display: block !important; }
 
-.dropdown {
-  position: relative;
-}
+  /* 3. Link chính (Trang chủ, Internet...) */
+  .nav-links li a, .menu-btn {
+    display: block !important;
+    padding: 15px 20px !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    background: none !important;
+    border: none !important; /* Diệt viền đen */
+    text-align: left !important;
+  }
 
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #fff;
-  list-style: none;
-  padding: 10px 0;
-  margin: 0;
-  min-width: 250px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 1000;
-}
+  /* 4. PHẦN SỔ XUỐNG (Dropdown) - Quan trọng nhất */
+  .dropdown-menu {
+    position: static !important; /* Đẩy nội dung xuống, không bay lơ lửng */
+    width: 100% !important;
+    background-color: #fcfcfc !important; /* Nền xám cực nhẹ để phân biệt */
+    padding: 0 !important;
+    border: none !important;
+    display: none;
+  }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
+  .dropdown-menu.active { display: block !important; }
 
-.dropdown-menu li a {
-  display: block;
-  padding: 12px 20px;
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  font-size: 14px;
-}
+  /* 5. Nút chọn danh mục con (child-btn) */
+  .dropdown-menu li {
+    border-bottom: 1px solid #f0f0f0; /* Gạch chân nhẹ giữa các mục */
+  }
 
-.dropdown-menu li a:hover {
-  background-color: #f9f9f9;
-}
+  .child-btn {
+    width: 100% !important;
+    padding: 15px 30px !important; /* Thụt vào 30px cho đẹp */
+    font-size: 15px !important;
+    color: #444 !important;
+    text-align: left !important;
+    background: none !important;
+    border: none !important; /* DIỆT TẬN GỐC Ô VUÔNG BỊ VIỀN */
+    cursor: pointer;
+    display: block;
+    transition: 0.2s;
+  }
 
-.text-red {
-  color: #e60028 !important;
+  /* Hiệu ứng khi bấm vào (Feedback cho người dùng) */
+  .child-btn:active {
+    background-color: #fff5f6 !important;
+    color: #e60028 !important;
+    font-weight: bold;
+  }
 }
