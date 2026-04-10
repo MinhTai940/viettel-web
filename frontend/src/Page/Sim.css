@@ -285,5 +285,59 @@
   .sim-card {
   flex: 0 0 auto !important; /* CẤM trình duyệt bóp nhỏ card lại */
   width: 165px; /* Chiều rộng mày muốn cho card trên mobile */
+  }
+  
 }
+
+/* ========================================= */
+/* FIX TRIỆT ĐỂ BẢNG HƯỚNG DẪN (MOBILE)      */
+/* ========================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Ép cái Wrapper không được cắt cụt bảng */
+  .search-input-wrapper {
+    position: static !important; /* Phá bỏ gốc tọa độ cũ để bảng tính theo Search Bar */
+  }
+
+  .search-bar {
+    position: relative; /* Gốc tọa độ mới nằm ở đây cho bảng dễ căn giữa */
+  }
+
+  /* 2. Căn giữa bảng hướng dẫn */
+  .search-tooltip {
+    width: 95vw !important; /* Gần như tràn màn hình cho dễ đọc */
+    max-width: 360px; /* Nhưng không quá to trên máy bảng */
+    left: 50% !important; 
+    right: auto !important;
+    transform: translateX(-50%) translateY(-10px) !important; /* Căn giữa hoàn hảo */
+    
+    /* Chỉnh lại lề lối cho thoáng */
+    padding: 15px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    z-index: 9999 !important;
+  }
+
+  /* Hiệu ứng hiện ra vẫn phải giữ căn giữa */
+  .search-input-wrapper:hover .search-tooltip,
+  .search-input:focus + .search-tooltip {
+    transform: translateX(-50%) translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* 3. Đẩy cái mũi tên vào giữa bảng luôn */
+  .search-tooltip::before {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  /* 4. Thu nhỏ chữ cho khỏi rớt dòng bậy bạ */
+  .search-tooltip h4 { font-size: 15px !important; margin-bottom: 10px !important; }
+  .search-tooltip li { 
+    font-size: 12px !important; 
+    line-height: 1.5 !important; 
+    margin-bottom: 6px !important;
+    text-align: left; /* Đảm bảo chữ canh trái dễ đọc */
+  }
 }
