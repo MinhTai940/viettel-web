@@ -424,3 +424,47 @@
   /* ⭐ không méo ảnh */
   display: block;
 }
+/* ========================================= */
+/* FIX BANNER INTERNET - HIỆN FULL KHÔNG BỂ  */
+/* ========================================= */
+@media (max-width: 768px) {
+  
+  .internet-hero, .internet-hero1 {
+    margin: 10px; /* Cách lề một chút cho sang */
+    border-radius: 12px; 
+    overflow: hidden;
+    height: auto !important; /* Xóa bỏ mọi loại height cố định */
+    background: none;
+  }
+
+  .internet-hero img, .internet-hero1 img {
+    width: 100% !important;
+    height: auto !important; /* Quan trọng: Để ảnh tự quyết định chiều cao */
+    
+    /* XÓA BỎ aspect-ratio: 16/9 cũ đi */
+    aspect-ratio: auto !important; 
+    
+    /* Dùng cái này để ảnh hiện ra 100% không mất 1 pixel nào */
+    object-fit: contain; 
+    display: block;
+  }
+
+  /* --- Giữ nguyên phần lướt ngang gói cước --- */
+  .internet-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 16px;
+    padding: 10px 15px 30px 15px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .internet-grid::-webkit-scrollbar { display: none; }
+
+  .internet-grid > div {
+    flex: 0 0 auto;
+    width: 290px;
+    scroll-snap-align: center;
+  }
+}
