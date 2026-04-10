@@ -109,11 +109,8 @@ const DashBoard = () => {
                           {child.name}
                         </h2>
 
-                        <div style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 20
-                        }}>
+                        {/* ĐÃ SỬA CHỖ NÀY: Thay cục style bằng className */}
+                        <div className="plan-list-container">
 
                           {childPackages.map(p => (
 

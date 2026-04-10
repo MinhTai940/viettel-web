@@ -154,3 +154,82 @@
 
   border: 1px solid #e5002b;
 }
+
+/* ========================================= */
+/* FIX PLAN CARD CHO MOBILE (BẢN CÂN ĐỐI)    */
+/* ========================================= */
+@media (max-width: 768px) {
+  .plan-card {
+    width: 160px; 
+    padding: 25px 10px 15px; 
+    /* ĐÂY LÀ CHÌA KHÓA: Đẩy nguyên cái card xuống 15px để chừa khoảng trống trên đầu cho chữ lồi lên */
+    margin-top: 15px; 
+    gap: 8px; /* Ép các thành phần lại gần nhau cho card lùn xuống */
+    flex: 0 0 auto; 
+    scroll-snap-align: start; 
+  }
+
+  .plan-name {
+    font-size: 14px;
+    padding: 4px 14px;
+    /* TRẢ VỀ VỊ TRÍ CŨ: Lồi thẳng lên trên mép */
+    top: -14px; 
+    white-space: nowrap; 
+  }
+
+  .data-number { font-size: 28px; } /* Cân đối lại size chữ */
+  .data-duration { font-size: 13px; }
+  
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .price-number { font-size: 15px; }
+  .price-unit { font-size: 12px; }
+
+  /* ÉP 2 NÚT NẰM NGANG ĐỂ THẺ KHÔNG BỊ DÀI SỌC */
+  .plan-actions {
+    flex-direction: row; 
+    gap: 5px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-register, .btn-detail {
+    padding: 6px 0; /* Bỏ padding ngang để tự khớp tỷ lệ */
+    font-size: 11px; /* Nhỏ lại để chữ "CHI TIẾT" không bị rớt dòng */
+    width: 48%; /* Mỗi nút chiếm gần 1 nửa */
+    text-align: center;
+    white-space: nowrap; /* Cấm rớt chữ */
+  }
+}
+/* ========================================= */
+/* KHUNG CHỨA DANH SÁCH GÓI CƯỚC             */
+/* ========================================= */
+
+/* 1. Mặc định cho Máy tính (Desktop): Đủ chỗ thì nằm ngang, thiếu chỗ thì xuống dòng */
+.plan-list-container {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 20px;
+}
+
+/* 2. Dành riêng cho Điện thoại (Mobile): Cấm xuống dòng, ép lướt ngang */
+@media (max-width: 768px) {
+  .plan-list-container {
+    flex-wrap: nowrap; /* Cấm rớt dòng tuyệt đối */
+    overflow-x: auto; /* Bật chế độ cuộn ngang */
+    padding-bottom: 15px; /* Chừa tí không gian ở dưới cho thoáng */
+    gap: 12px; /* Kéo các card lại gần nhau hơn xíu */
+    
+    /* Hiệu ứng trượt mượt mà (chỉ có trên mobile) */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Chiêu ẩn thanh cuộn (scrollbar) xấu xí trên điện thoại */
+  .plan-list-container::-webkit-scrollbar {
+    display: none;
+  }
+}
