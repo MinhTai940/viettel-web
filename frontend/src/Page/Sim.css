@@ -237,3 +237,27 @@
 .fade-in-tab {
   animation: tabFadeIn 0.4s ease-out forwards; /* Thời gian 0.4 giây, chạy mượt dần */
 }
+/* ========================================= */
+/* BẬT LƯỚT NGANG CHO DANH SÁCH SIM (MOBILE) */
+/* ========================================= */
+@media (max-width: 768px) {
+  .cards-grid {
+    display: flex; /* Bỏ Grid, xài Flex */
+    flex-wrap: nowrap; /* Cấm rớt dòng */
+    overflow-x: auto; /* Bật vuốt ngang */
+    gap: 12px; /* Khoảng cách giữa các thẻ */
+    padding-bottom: 20px;
+    
+    scroll-snap-type: x mandatory; /* Hiệu ứng khựng khi vuốt */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ẩn thanh cuộn xấu xí */
+  .cards-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cards-grid > div {
+    scroll-snap-align: start;
+  }
+}
