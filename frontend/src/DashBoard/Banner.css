@@ -53,3 +53,27 @@
 .indicator-bar.active {
   background-color: #e60028; /* Vạch đỏ đậm của tấm ảnh đang chạy */
 }
+
+/* ========================================= */
+/* FIX CHUẨN BANNER CHO ĐIỆN THOẠI           */
+/* ========================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Ép chiều cao cái khung lùn xuống cho khớp với đt */
+  .banner-container {
+    height: 220px; /* Tùy chỉnh (200px - 250px) sao cho ảnh không bị lùn quá */
+    width: 100%;
+  }
+
+  /* 2. Bắt cái ảnh phải lấp đầy cái khung 220px đó, dư thì cắt bớt (cover) chứ không được méo */
+  .banner-image {
+    width: 100% !important;
+    height: 100% !important; 
+    object-fit: cover; 
+  }
+
+  /* 3. Đẩy cái cụm hiển thị 1/2 và vạch kẻ nằm ngoan ngoãn bên trong góc dưới ảnh */
+  .banner-indicator {
+    bottom: 10px; /* Cách mí dưới 10px cho đẹp */
+  }
+}
