@@ -5,16 +5,34 @@ const path = require('path');
 // DÁN CÁI MÃ TÀI SẢN (9 CHỮ SỐ) CỦA MÀY VÀO ĐÂY
 const propertyId = process.env.GA_PROPERTY_ID;
 
-const keyPath = path.join(__dirname, '..', 'ga-key.json');
-const analyticsDataClient = new BetaAnalyticsDataClient({
-  keyFilename: keyPath,
-});
+// Hỗ trợ 2 cách cung cấp credentials:
+// 1) File key tại backend/ga-key.json (cũ)
+// 2) ENV `GA_KEY_JSON` chứa toàn bộ JSON key (không commit file vào repo)
+let analyticsDataClient;
+try {
+  if (process.env.GA_KEY_JSON) {
+    const credentials = JSON.parse(process.env.GA_KEY_JSON);
+    analyticsDataClient = new BetaAnalyticsDataClient({ credentials });
+    console.info('GA: using credentials from GA_KEY_JSON env');
+  } else {
+    const keyPath = path.join(__dirname, '..', 'ga-key.json');
+    analyticsDataClient = new BetaAnalyticsDataClient({ keyFilename: keyPath });
+    console.info('GA: using key file at', keyPath);
+  }
+} catch (e) {
+  console.error('GA: failed to initialize analytics client:', e.stack || e);
+  // Leave analyticsDataClient undefined; getVisitorStats will handle missing client
+}
 
 exports.getVisitorStats = async (req, res) => {
   try {
     if (!propertyId) {
       console.error('GA_PROPERTY_ID is not set.');
       return res.status(500).json({ message: 'GA configuration missing' });
+    }
+    if (!analyticsDataClient) {
+      console.error('analyticsDataClient not initialized. Check GA_KEY_JSON or ga-key.json');
+      return res.status(500).json({ message: 'GA client not initialized' });
     }
     const [response] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
@@ -42,7 +60,10 @@ exports.getVisitorStats = async (req, res) => {
     res.status(200).json(formattedData);
   } catch (error) {
     console.error('Lỗi GA4 cụ thể:', error.stack || error);
-    // Không trả chi tiết lỗi nội bộ cho client, log trên server thay vào đó
+    // Nếu đang debug trên deploy, cho phép trả chi tiết khi DEBUG_GA=true
+    if (process.env.DEBUG_GA === 'true') {
+      return res.status(500).json({ message: 'Lỗi GA4', detail: error.message, stack: error.stack });
+    }
     res.status(500).json({ message: 'Lỗi GA4' });
   }
 };
