@@ -13,15 +13,18 @@ exports.getVisitorStats = async (req, res) => {
     const [response] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
       dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'date' }], // Lấy theo ngày
-      metrics: [{ name: 'activeUsers' }], // Lấy số người dùng
+      dimensions: [{ name: 'date' }],
+      metrics: [{ name: 'activeUsers' }],
     });
 
-    // Format lại data cho Frontend dễ vẽ biểu đồ
+    // --- SỬA TỪ ĐÂY: Kiểm tra nếu không có dữ liệu ---
+    if (!response.rows || response.rows.length === 0) {
+      return res.status(200).json([]); // Trả về mảng rỗng thay vì để code bị crash
+    }
+
     const formattedData = response.rows.map(row => {
-      const rawDate = row.dimensionValues[0].value; // Định dạng YYYYMMDD
+      const rawDate = row.dimensionValues[0].value;
       return {
-        // Biến thành DD/MM để hiện lên biểu đồ cho đẹp
         date: `${rawDate.slice(6, 8)}/${rawDate.slice(4, 6)}`,
         users: parseInt(row.metricValues[0].value, 10),
       };
@@ -32,7 +35,11 @@ exports.getVisitorStats = async (req, res) => {
 
     res.status(200).json(formattedData);
   } catch (error) {
-    console.error("Lỗi GA4:", error);
-    res.status(500).json({ message: "Không thể lấy dữ liệu từ Google" });
-  }
+    console.error("Lỗi GA4 cụ thể:", error);
+    // Thay vì gửi message chung chung, gửi luôn cái error.message để xem bệnh
+    res.status(500).json({ 
+      message: "Lỗi GA4", 
+      detail: error.message 
+    });
+}
 };
