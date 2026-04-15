@@ -35,6 +35,8 @@ app.use("/api/internet-category", internetCategoryRoutes)
 app.use("/api/sim", simRoutes)
 app.use("/api/internet-orders", internetOrderRoutes)
 app.use("/api/contact", contactRoutes)
+app.use('/analytics', analyticsRoutes);
+app.use('/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000
 
