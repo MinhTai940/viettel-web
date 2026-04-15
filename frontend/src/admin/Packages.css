@@ -1,0 +1,46 @@
+/* Packages.css */
+.packages-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Chia 2 cột đều nhau */
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.custom-input, .custom-select {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #fee2e2; /* Màu hồng nhạt như hình */
+    border-radius: 12px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.custom-input::placeholder {
+    color: #9ca3af;
+}
+
+.custom-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 16px 20px;
+    border: 2px solid #fee2e2;
+    border-radius: 12px;
+    resize: none;
+}
+
+.btn-submit {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #e5002b, #ff6b35);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(229,0,43,0.2);
+}

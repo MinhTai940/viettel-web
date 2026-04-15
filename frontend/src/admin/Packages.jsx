@@ -2,799 +2,223 @@ import { useState, useEffect } from "react"
 import API from "../services/api"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
+import "./Packages.css"
 
 function Packages() {
-
+    const [activeTab, setActiveTab] = useState("basic")
+    const [loading, setLoading] = useState(false)
+    const [uploading, setUploading] = useState(false)
     const [categories, setCategories] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [emptyPackages, setEmptyPackages] = useState([])
+    const [selectedId, setSelectedId] = useState("")
 
-    const [name, setName] = useState("")
-    const [data, setData] = useState("")
-    const [price, setPrice] = useState("")
-    const [duration, setDuration] = useState("")
-    const [smsCode, setSmsCode] = useState("")
+    // TAB 1: 7 trường cơ bản
+    const [basic, setBasic] = useState({
+        category: "", name: "", data: "", price: "", duration: "", smsCode: "", description: ""
+    })
 
-    const [description, setDescription] = useState("")
+    // TAB 2: Tất cả phần còn lại từ file gốc của mày
     const [banner, setBanner] = useState("")
     const [videoUrl, setVideoUrl] = useState("")
-    const [advancedPackages, setAdvancedPackages] = useState([
-        { name: "", data: "", price: "", duration: "", sms_code: "" }
-    ])
-    const [advancedIntro, setAdvancedIntro] = useState("")
-
-    // ⭐ RICH CONTENT
     const [detailInfo, setDetailInfo] = useState("")
     const [condition, setCondition] = useState("")
     const [registerGuide, setRegisterGuide] = useState("")
     const [benefit, setBenefit] = useState("")
     const [manageGuide, setManageGuide] = useState("")
-
-    const [loading, setLoading] = useState(false)
-
-    // ⭐ upload state
-    const [uploading, setUploading] = useState(false)
-
+    const [advancedIntro, setAdvancedIntro] = useState("")
+    const [advancedPackages, setAdvancedPackages] = useState([{ name: "", data: "", price: "", duration: "", sms_code: "" }])
 
     useEffect(() => {
         fetchCategories()
-    }, [])
+        if (activeTab === "detail") fetchEmptyPackages()
+    }, [activeTab])
 
     const fetchCategories = async () => {
         const res = await API.get("/categories")
         setCategories(res.data)
     }
 
-    // ⭐ FUNCTION UPLOAD ẢNH
-    const uploadImage = async (file) => {
+    const fetchEmptyPackages = async () => {
+        const res = await API.get("/packages")
+        setEmptyPackages(res.data.filter(p => !p.content || p.content.length < 50))
+    }
 
+    // ⭐ FUNCTION UPLOAD ẢNH (Từ file gốc)
+    const uploadImage = async (file) => {
         const formData = new FormData()
         formData.append("image", file)
-
         setUploading(true)
-
         const res = await API.post("/upload", formData)
-
         setUploading(false)
-
         return res.data.url
     }
 
-    // ⭐ HANDLE CHỌN ẢNH → CHÈN VÀO EDITOR
     const handleInsertImage = async (e) => {
-
         const file = e.target.files[0]
         if (!file) return
-
         const url = await uploadImage(file)
-
-        // chèn ảnh vào editor
-        setDetailInfo(prev =>
-            prev + `<p><<img src="${url}" /></p>`
-        )
+        setDetailInfo(prev => prev + `<p><img src="${url}" /></p>`)
     }
 
-    const createPackage = async () => {
-
-        if (!selectedCategory || !name) {
-            alert("Nhập tên + chọn danh mục")
-            return
-        }
-
+    // ⭐ XỬ LÝ TẠO GÓI BƯỚC 1
+    const handleCreateBasic = async () => {
+        if (!basic.category || !basic.name) return alert("Nhập tên + chọn danh mục")
         setLoading(true)
-
         try {
-
-            const fullContent = `
-                <h2>Thông tin chi tiết gói cước</h2>
-                ${detailInfo}
-
-                <h2>Điều kiện đăng ký</h2>
-                ${condition}
-
-                <h2>Cách đăng ký</h2>
-                ${registerGuide}
-
-                <h2>Lợi ích khi sử dụng</h2>
-                ${benefit}
-
-                <h2>Cách quản lý gói</h2>
-                ${manageGuide}
-            `
-
-            await API.post("/packages", {
-                name,
-                data,
-                price: parseInt(price),
-                duration,
-                sms_code: smsCode,
-                category: selectedCategory,
-                description,
-                banner,
-                video_url: videoUrl,
-                content: fullContent,
-                advanced_intro: advancedIntro,
-                advanced_packages: advancedPackages,
-            })
-
-            alert("✅ Tạo gói thành công")
-
-        } catch (err) {
-            alert("❌ Lỗi tạo gói")
-        }
-
+            await API.post("/packages", { ...basic, price: parseInt(basic.price), sms_code: basic.smsCode })
+            alert("✅ Đã tạo xong khung! Hãy qua tab Chi tiết để hoàn thiện.")
+            setActiveTab("detail")
+        } catch (err) { alert("❌ Lỗi tạo gói") }
         setLoading(false)
     }
-    // ⭐ THÊM 1 GÓI NÂNG CAO
-    const addAdvanced = () => {
-        setAdvancedPackages([
-            ...advancedPackages,
-            { name: "", data: "", price: "", duration: "", sms_code: "" }
-        ])
+
+    // ⭐ XỬ LÝ HOÀN TẤT CHI TIẾT BƯỚC 2
+    const handleUpdateDetail = async () => {
+        if (!selectedId) return alert("Chọn gói cước cần thêm chi tiết!")
+        setLoading(true)
+        try {
+            const fullContent = `
+                <h2>Thông tin chi tiết gói cước</h2> ${detailInfo}
+                <h2>Điều kiện đăng ký</h2> ${condition}
+                <h2>Cách đăng ký</h2> ${registerGuide}
+                <h2>Lợi ích khi sử dụng</h2> ${benefit}
+                <h2>Cách quản lý gói</h2> ${manageGuide}
+            `
+            await API.put(`/packages/${selectedId}`, {
+                banner, video_url: videoUrl, content: fullContent,
+                advanced_intro: advancedIntro, advanced_packages: advancedPackages
+            })
+            alert("✅ Đã lưu toàn bộ thông tin chi tiết!")
+            fetchEmptyPackages()
+        } catch (err) { alert("❌ Lỗi lưu chi tiết") }
+        setLoading(false)
     }
+
     const updateAdvanced = (index, field, value) => {
-
-        const list = [...advancedPackages]
-
-        list[index][field] = value
-
-        setAdvancedPackages(list)
+        const list = [...advancedPackages]; list[index][field] = value; setAdvancedPackages(list)
     }
-    const childCategories = categories.filter(c => c.parent)
 
     return (
-        <>
-            <style>{`
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .form-section { animation: fadeInUp 0.6s ease forwards; opacity: 0; animation-delay: 0.1s; }
-                .form-section:nth-child(2n) { animation-delay: 0.2s; }
-                .quill-editor { margin-bottom: 24px; border-radius: 16px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-            `}</style>
-            <div className="admin-card" style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                background: 'rgba(255,255,255,0.95)',
-                backdropFilter: 'blur(20px)',
-                borderRadius: '24px',
-                padding: '40px',
-                boxShadow: '0 25px 50px rgba(0,0,0,0.1)',
-                border: '1px solid rgba(255,255,255,0.2)'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '32px',
-                    paddingBottom: '20px',
-                    borderBottom: '2px solid rgba(229,0,43,0.1)'
-                }}>
-                    <h1 style={{
-                        fontSize: '32px',
-                        fontWeight: '700',
-                        background: 'linear-gradient(135deg, #e5002b, #ff6b35)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        margin: 0
-                    }}>📦 Tạo gói cước mới</h1>
-                    <div style={{
-                        padding: '12px 24px',
-                        background: 'linear-gradient(135deg, #e5002b, #ff6b35)',
-                        color: 'white',
-                        borderRadius: '50px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        boxShadow: '0 8px 25px rgba(229,0,43,0.3)',
-                        transition: 'all 0.3s ease'
-                    }} onMouseEnter={(e) => {
-                        e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = '0 12px 35px rgba(229,0,43,0.4)';
-                    }} onMouseLeave={(e) => {
-                        e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 8px 25px rgba(229,0,43,0.3)';
-                    }}>
-                        {loading ? '⏳ Đang tạo...' : '🚀 Tạo gói'}
-                    </div>
-                </div>
+        <div className="packages-container">
+            <div className="tab-header">
+                <button className={`tab-btn ${activeTab === 'basic' ? 'active' : ''}`} onClick={() => setActiveTab('basic')}>1. Tạo gói cơ bản</button>
+                <button className={`tab-btn ${activeTab === 'detail' ? 'active' : ''}`} onClick={() => setActiveTab('detail')}>2. Bổ sung chi tiết</button>
+            </div>
 
-                {/* Basic Info Section */}
-                <div className="form-section" style={{
-                    background: 'rgba(255,255,255,0.6)',
-                    padding: '32px',
-                    borderRadius: '20px',
-                    marginBottom: '32px',
-                    border: '1px solid rgba(229,0,43,0.1)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.06)'
-                }}>
-                    <h2 style={{ marginBottom: '24px', color: '#1f2937', fontSize: '24px', fontWeight: '600' }}>📋 Thông tin cơ bản</h2>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Danh mục</label>
-                            <select
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#e5002b'}
-                                onBlur={(e) => e.target.style.borderColor = 'rgba(229,0,43,0.2)'}
-                                value={selectedCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
-                            >
+            {activeTab === 'basic' ? (
+                <div className="form-section">
+                    <h2 style={{marginBottom: '24px'}}>📋 Thông tin cơ bản</h2>
+                    <div className="input-grid">
+                        <div className="input-group">
+                            <label>Danh mục</label>
+                            <select className="custom-select" value={basic.category} onChange={e => setBasic({...basic, category: e.target.value})}>
                                 <option value="">📂 Chọn danh mục</option>
-                                {childCategories.map(c => (
-                                    <option key={c._id} value={c._id}>
-                                        {c.name}
-                                    </option>
-                                ))}
+                                {categories.filter(c => c.parent).map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
                             </select>
                         </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Tên gói</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#e5002b'}
-                                onBlur={(e) => e.target.style.borderColor = 'rgba(229,0,43,0.2)'}
-                                placeholder="VD: C120 MAX"
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Dung lượng</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#e5002b'}
-                                onBlur={(e) => e.target.style.borderColor = 'rgba(229,0,43,0.2)'}
-                                placeholder="VD: 120GB"
-                                value={data}
-                                onChange={e => setData(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Giá</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#e5002b'}
-                                onBlur={(e) => e.target.style.borderColor = 'rgba(229,0,43,0.2)'}
-                                placeholder="VD: 120000"
-                                value={price}
-                                onChange={e => setPrice(e.target.value)}
-                            />
+                        <div className="input-group">
+                            <label>Tên gói</label>
+                            <input className="custom-input" placeholder="VD: C120 MAX" value={basic.name} onChange={e => setBasic({...basic, name: e.target.value})} />
                         </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '24px' }}>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Thời hạn</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                placeholder="VD: 30 ngày"
-                                value={duration}
-                                onChange={e => setDuration(e.target.value)}
-                            />
+                    <div className="input-grid">
+                        <div className="input-group">
+                            <label>Dung lượng</label>
+                            <input className="custom-input" placeholder="VD: 120GB" value={basic.data} onChange={e => setBasic({...basic, data: e.target.value})} />
                         </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>SMS Code</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                placeholder="VD: SMS120"
-                                value={smsCode}
-                                onChange={e => setSmsCode(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Mô tả ngắn</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                placeholder="Gói cước tốc độ cao, ổn định..."
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
-                            />
+                        <div className="input-group">
+                            <label>Giá</label>
+                            <input className="custom-input" placeholder="VD: 120000" value={basic.price} onChange={e => setBasic({...basic, price: e.target.value})} />
                         </div>
                     </div>
+                    <div className="input-grid">
+                        <div className="input-group">
+                            <label>Thời hạn</label>
+                            <input className="custom-input" placeholder="VD: 30 ngày" value={basic.duration} onChange={e => setBasic({...basic, duration: e.target.value})} />
+                        </div>
+                        <div className="input-group">
+                            <label>SMS Code</label>
+                            <input className="custom-input" placeholder="VD: SMS120" value={basic.smsCode} onChange={e => setBasic({...basic, smsCode: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="input-group" style={{maxWidth: '500px'}}>
+                        <label>Mô tả ngắn</label>
+                        <textarea className="custom-textarea" placeholder="Gói cước tốc độ cao..." value={basic.description} onChange={e => setBasic({...basic, description: e.target.value})} />
+                    </div>
+                    <button className="btn-submit" style={{marginTop: '20px'}} onClick={handleCreateBasic}>🚀 Tạo gói bước 1</button>
                 </div>
-
-                {/* URLs Section */}
-                <div className="form-section" style={{
-                    background: 'rgba(255,255,255,0.6)',
-                    padding: '32px',
-                    borderRadius: '20px',
-                    marginBottom: '32px',
-                    border: '1px solid rgba(229,0,43,0.1)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.06)'
-                }}>
-                    <h2 style={{ marginBottom: '24px', color: '#1f2937', fontSize: '24px', fontWeight: '600' }}>🖼️ Hình ảnh & Video</h2>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Banner URL</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                placeholder="https://example.com/banner.jpg"
-                                value={banner}
-                                onChange={e => setBanner(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '8px',
-                                fontWeight: '600',
-                                color: '#374151'
-                            }}>Video URL</label>
-                            <input
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px',
-                                    border: '2px solid rgba(229,0,43,0.2)',
-                                    borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.9)',
-                                    fontSize: '16px',
-                                    transition: 'all 0.3s ease',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                                placeholder="https://youtube.com/watch?v=..."
-                                value={videoUrl}
-                                onChange={e => setVideoUrl(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Upload & Rich Content */}
-                <div className="form-section" style={{
-                    background: 'rgba(255,255,255,0.6)',
-                    padding: '32px',
-                    borderRadius: '20px',
-                    marginBottom: '32px',
-                    border: '1px solid rgba(229,0,43,0.1)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.06)'
-                }}>
-                    <div style={{ display: 'flex', gap: '32px', alignItems: 'center', marginBottom: '24px' }}>
-                        <div style={{
-                            padding: '16px 24px',
-                            background: 'linear-gradient(135deg, rgba(229,0,43,0.1), rgba(255,107,53,0.1))',
-                            borderRadius: '16px',
-                            border: '2px dashed rgba(229,0,43,0.3)'
-                        }}>
-                            <label style={{ fontWeight: '600', color: '#e5002b', cursor: 'pointer', display: 'block', marginBottom: '8px' }}>📤 Upload ảnh nội dung</label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                id="imageUpload"
-                                onChange={handleInsertImage}
-                            />
-                            <label htmlFor="imageUpload" style={{
-                                padding: '12px 24px',
-                                background: 'white',
-                                borderRadius: '12px',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                transition: 'all 0.3s ease',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                display: 'inline-block'
-                            }}
-                                onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
-                                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                            >
-                                {uploading ? '⏳ Đang upload...' : 'Chọn ảnh'}
-                            </label>
-                        </div>
+            ) : (
+                <div className="form-section">
+                    <h2 style={{marginBottom: '20px'}}>📝 Hoàn thiện nội dung & Gói nâng cao</h2>
+                    <div className="input-group" style={{marginBottom: '32px'}}>
+                        <label>Chọn gói cước cần thêm chi tiết</label>
+                        <select className="custom-select" value={selectedId} onChange={e => setSelectedId(e.target.value)}>
+                            <option value="">-- Chọn gói từ danh sách --</option>
+                            {emptyPackages.map(p => <option key={p._id} value={p._id}>{p.name} - {p.price?.toLocaleString()}đ</option>)}
+                        </select>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-                        <div>
-                            <h3 style={{ marginBottom: '16px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>📄 Thông tin chi tiết</h3>
-                            <div className="quill-editor">
-                                <ReactQuill theme="snow" value={detailInfo} onChange={setDetailInfo} />
-                            </div>
-                        </div>
-                        <div>
-                            <h3 style={{ marginBottom: '16px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>✅ Điều kiện đăng ký</h3>
-                            <div className="quill-editor">
-                                <ReactQuill theme="snow" value={condition} onChange={setCondition} />
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginTop: '24px' }}>
-                        <div>
-                            <h3 style={{ marginBottom: '16px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>📖 Hướng dẫn đăng ký</h3>
-                            <div className="quill-editor">
-                                <ReactQuill theme="snow" value={registerGuide} onChange={setRegisterGuide} />
-                            </div>
-                        </div>
-                        <div>
-                            <h3 style={{ marginBottom: '16px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>⭐ Lợi ích sử dụng</h3>
-                            <div className="quill-editor">
-                                <ReactQuill theme="snow" value={benefit} onChange={setBenefit} />
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ marginTop: '24px' }}>
-                        <h3 style={{ marginBottom: '16px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>⚙️ Hướng dẫn quản lý</h3>
-                        <div className="quill-editor">
-                            <ReactQuill theme="snow" value={manageGuide} onChange={setManageGuide} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Advanced Packages */}
-                <div className="form-section" style={{
-                    background: 'rgba(255,255,255,0.6)',
-                    padding: '32px',
-                    borderRadius: '20px',
-                    marginBottom: '32px',
-                    border: '1px solid rgba(229,0,43,0.1)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.06)'
-                }}>
-                    <h2 style={{ marginBottom: '24px', color: '#1f2937', fontSize: '24px', fontWeight: '600' }}>⚡ Gói nâng cao</h2>
-                    <div style={{ marginBottom: '24px' }}>
-                        <label style={{
-                            display: 'block',
-                            marginBottom: '8px',
-                            fontWeight: '600',
-                            color: '#374151',
-                            fontSize: '16px'
-                        }}>Giới thiệu gói nâng cao</label>
-                        <textarea
-                            style={{
-                                width: '100%',
-                                minHeight: '120px',
-                                padding: '20px',
-                                border: '2px solid rgba(229,0,43,0.2)',
-                                borderRadius: '16px',
-                                background: 'rgba(255,255,255,0.9)',
-                                fontSize: '16px',
-                                fontFamily: 'inherit',
-                                resize: 'vertical',
-                                transition: 'all 0.3s ease',
-                                outline: 'none',
-                                backdropFilter: 'blur(10px)',
-                                boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.05)'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#e5002b'}
-                            onBlur={(e) => e.target.style.borderColor = 'rgba(229,0,43,0.2)'}
-                            placeholder="Nhập mô tả các gói nâng cao tương tự website Viettel..."
-                            value={advancedIntro}
-                            onChange={e => setAdvancedIntro(e.target.value)}
-                        />
-                    </div>
-                    <h3 style={{ marginBottom: '20px', color: '#1f2937', fontSize: '20px', fontWeight: '600' }}>Danh sách gói nâng cao</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        {advancedPackages.map((item, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    background: 'white',
-                                    padding: '24px',
-                                    borderRadius: '20px',
-                                    boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-                                    border: '1px solid rgba(0,0,0,0.05)',
-                                    position: 'relative'
-                                }}
-                            >
-                                <div style={{
-                                    position: 'absolute',
-                                    top: '16px',
-                                    right: '16px',
-                                    width: '32px',
-                                    height: '32px',
-                                    borderRadius: '50%',
-                                    background: 'rgba(239,68,68,0.1)',
-                                    color: '#dc2626',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    opacity: 0.7,
-                                    transition: 'all 0.2s ease'
-                                }}
-                                    onMouseEnter={(e) => e.target.style.opacity = 1}
-                                    onClick={() => {
-                                        const newList = advancedPackages.filter((_, i) => i !== index);
-                                        setAdvancedPackages(newList.length ? newList : [{ name: "", data: "", price: "", duration: "", sms_code: "" }]);
-                                    }}
-                                >×</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-                                    <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>Tên gói nâng cao</label>
-                                        <input
-                                            style={{
-                                                width: '100%',
-                                                padding: '14px 16px',
-                                                border: '2px solid rgba(229,0,43,0.2)',
-                                                borderRadius: '10px',
-                                                background: 'rgba(255,255,255,0.8)',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                outline: 'none'
-                                            }}
-                                            placeholder="VD: 6T5G135"
-                                            value={item.name}
-                                            onChange={e => updateAdvanced(index, "name", e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>Dung lượng</label>
-                                        <input
-                                            style={{
-                                                width: '100%',
-                                                padding: '14px 16px',
-                                                border: '2px solid rgba(229,0,43,0.2)',
-                                                borderRadius: '10px',
-                                                background: 'rgba(255,255,255,0.8)',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                outline: 'none'
-                                            }}
-                                            placeholder="VD: 720GB"
-                                            value={item.data}
-                                            onChange={e => updateAdvanced(index, "data", e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>Giá</label>
-                                        <input
-                                            style={{
-                                                width: '100%',
-                                                padding: '14px 16px',
-                                                border: '2px solid rgba(229,0,43,0.2)',
-                                                borderRadius: '10px',
-                                                background: 'rgba(255,255,255,0.8)',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                outline: 'none'
-                                            }}
-                                            placeholder="VD: 1.350.000đ"
-                                            value={item.price}
-                                            onChange={e => updateAdvanced(index, "price", e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>Thời hạn</label>
-                                        <input
-                                            style={{
-                                                width: '100%',
-                                                padding: '14px 16px',
-                                                border: '2px solid rgba(229,0,43,0.2)',
-                                                borderRadius: '10px',
-                                                background: 'rgba(255,255,255,0.8)',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                outline: 'none'
-                                            }}
-                                            placeholder="VD: 6 tháng"
-                                            value={item.duration}
-                                            onChange={e => updateAdvanced(index, "duration", e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#374151' }}>SMS Code</label>
-                                        <input
-                                            style={{
-                                                width: '100%',
-                                                padding: '14px 16px',
-                                                border: '2px solid rgba(229,0,43,0.2)',
-                                                borderRadius: '10px',
-                                                background: 'rgba(255,255,255,0.8)',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                outline: 'none'
-                                            }}
-                                            placeholder="VD: SMS6T5G"
-                                            value={item.sms_code}
-                                            onChange={e => updateAdvanced(index, "sms_code", e.target.value)}
-                                        />
-                                    </div>
+                    {selectedId && (
+                        <>
+                            <div className="input-grid">
+                                <div className="input-group">
+                                    <label>Banner URL</label>
+                                    <input className="custom-input" value={banner} onChange={e => setBanner(e.target.value)} />
+                                </div>
+                                <div className="input-group">
+                                    <label>Video URL</label>
+                                    <input className="custom-input" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} />
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    <button
-                        type="button"
-                        style={{
-                            padding: '16px 32px',
-                            background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '50px',
-                            fontSize: '16px',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            boxShadow: '0 8px 25px rgba(14,165,233,0.4)',
-                            transition: 'all 0.3s ease',
-                            marginTop: '24px'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 12px 35px rgba(14,165,233,0.5)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 8px 25px rgba(14,165,233,0.4)';
-                        }}
-                        onClick={addAdvanced}
-                    >
-                        ➕ Thêm gói nâng cao
-                    </button>
-                </div>
 
-                <div style={{
-                    display: 'flex',
-                    gap: '20px',
-                    justifyContent: 'flex-end'
-                }}>
-                    <button
-                        onClick={() => {
-                            if (window.confirm('Xác nhận reset form?')) {
-                                // Reset logic here if needed
-                            }
-                        }}
-                        style={{
-                            padding: '16px 32px',
-                            background: 'rgba(107,114,128,0.1)',
-                            color: '#6b7280',
-                            border: '1px solid rgba(107,114,128,0.3)',
-                            borderRadius: '50px',
-                            fontSize: '16px',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease'
-                        }}
-                    >
-                        🔄 Reset
-                    </button>
-                    <button
-                        className="btn btn-primary"
-                        style={{
-                            padding: '18px 40px',
-                            background: 'linear-gradient(135deg, #e5002b, #ff6b35)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '50px',
-                            fontSize: '17px',
-                            fontWeight: '700',
-                            cursor: 'pointer',
-                            boxShadow: '0 10px 35px rgba(229,0,43,0.4)',
-                            transition: 'all 0.3s ease'
-                        }}
-                        onClick={createPackage}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <span style={{ marginRight: '8px' }}>⏳</span>
-                                Đang tạo gói...
-                            </>
-                        ) : (
-                            <>
-                                <span style={{ marginRight: '8px' }}>🚀</span>
-                                Tạo gói cước
-                            </>
-                        )}
-                    </button>
+                            <div style={{marginBottom: '24px'}}>
+                                <label style={{fontWeight: '700', color: '#e5002b', cursor: 'pointer'}}>📤 Upload ảnh vào chi tiết: </label>
+                                <input type="file" onChange={handleInsertImage} />
+                            </div>
+
+                            <div className="quill-editor-wrapper">
+                                <h3>📄 Thông tin chi tiết</h3>
+                                <ReactQuill theme="snow" value={detailInfo} onChange={setDetailInfo} />
+                            </div>
+                            <div className="quill-editor-wrapper">
+                                <h3>✅ Điều kiện đăng ký</h3>
+                                <ReactQuill theme="snow" value={condition} onChange={setCondition} />
+                            </div>
+                            <div className="quill-editor-wrapper">
+                                <h3>📖 Hướng dẫn đăng ký</h3>
+                                <ReactQuill theme="snow" value={registerGuide} onChange={setRegisterGuide} />
+                            </div>
+                            <div className="quill-editor-wrapper">
+                                <h3>⭐ Lợi ích sử dụng</h3>
+                                <ReactQuill theme="snow" value={benefit} onChange={setBenefit} />
+                            </div>
+                            <div className="quill-editor-wrapper">
+                                <h3>⚙️ Hướng dẫn quản lý</h3>
+                                <ReactQuill theme="snow" value={manageGuide} onChange={setManageGuide} />
+                            </div>
+
+                            <div style={{background: '#fff5f5', padding: '24px', borderRadius: '16px', marginTop: '30px'}}>
+                                <h3>⚡ Gói nâng cao (6T, 12T...)</h3>
+                                <textarea className="custom-textarea" value={advancedIntro} onChange={e => setAdvancedIntro(e.target.value)} placeholder="Giới thiệu gói nâng cao..." />
+                                {advancedPackages.map((adv, idx) => (
+                                    <div key={idx} style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
+                                        <input className="custom-input" placeholder="Tên" value={adv.name} onChange={e => updateAdvanced(idx, 'name', e.target.value)} />
+                                        <input className="custom-input" placeholder="Data" value={adv.data} onChange={e => updateAdvanced(idx, 'data', e.target.value)} />
+                                        <input className="custom-input" placeholder="Giá" value={adv.price} onChange={e => updateAdvanced(idx, 'price', e.target.value)} />
+                                        <input className="custom-input" placeholder="SMS" value={adv.sms_code} onChange={e => updateAdvanced(idx, 'sms_code', e.target.value)} />
+                                    </div>
+                                ))}
+                                <button className="tab-btn" style={{color: '#0ea5e9'}} onClick={() => setAdvancedPackages([...advancedPackages, { name: "", data: "", price: "", duration: "", sms_code: "" }])}>+ Thêm dòng</button>
+                            </div>
+
+                            <div style={{textAlign: 'right', marginTop: '40px'}}>
+                                <button className="btn-submit" onClick={handleUpdateDetail}>✅ Hoàn tất toàn bộ</button>
+                            </div>
+                        </>
+                    )}
                 </div>
-            </div>
-        </>
+            )}
+        </div>
     )
 }
 
