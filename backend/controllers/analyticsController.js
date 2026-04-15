@@ -2,7 +2,6 @@
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const path = require('path');
 
-// DÁN CÁI MÃ TÀI SẢN (9 CHỮ SỐ) CỦA MÀY VÀO ĐÂY
 const propertyId = process.env.GA_PROPERTY_ID;
 
 // Hỗ trợ 2 cách cung cấp credentials:
