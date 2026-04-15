@@ -14,6 +14,8 @@ const internetCategoryRoutes = require("./routes/internetCategoryRoutes")
 const simRoutes = require("./routes/simRoutes")
 const internetOrderRoutes = require("./routes/internetOrderRoutes")
 const contactRoutes = require("./routes/contactRoutes")
+const analyticsRoutes = require('./routes/analyticsRoute');
+const adminRoutes = require('./routes/adminRoute');
 
 const app = express()
 
@@ -35,8 +37,8 @@ app.use("/api/internet-category", internetCategoryRoutes)
 app.use("/api/sim", simRoutes)
 app.use("/api/internet-orders", internetOrderRoutes)
 app.use("/api/contact", contactRoutes)
-app.use('/analytics', analyticsRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000
 
