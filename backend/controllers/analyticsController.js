@@ -1,15 +1,21 @@
 // backend/controllers/analyticsController.js
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
+const path = require('path');
 
 // DÁN CÁI MÃ TÀI SẢN (9 CHỮ SỐ) CỦA MÀY VÀO ĐÂY
 const propertyId = process.env.GA_PROPERTY_ID;
 
+const keyPath = path.join(__dirname, '..', 'ga-key.json');
 const analyticsDataClient = new BetaAnalyticsDataClient({
-  keyFilename: './ga-key.json', // Đường dẫn tới file JSON mày để ở gốc backend
+  keyFilename: keyPath,
 });
 
 exports.getVisitorStats = async (req, res) => {
   try {
+    if (!propertyId) {
+      console.error('GA_PROPERTY_ID is not set.');
+      return res.status(500).json({ message: 'GA configuration missing' });
+    }
     const [response] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
       dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
@@ -35,11 +41,8 @@ exports.getVisitorStats = async (req, res) => {
 
     res.status(200).json(formattedData);
   } catch (error) {
-    console.error("Lỗi GA4 cụ thể:", error);
-    // Thay vì gửi message chung chung, gửi luôn cái error.message để xem bệnh
-    res.status(500).json({ 
-      message: "Lỗi GA4", 
-      detail: error.message 
-    });
-}
+    console.error('Lỗi GA4 cụ thể:', error.stack || error);
+    // Không trả chi tiết lỗi nội bộ cho client, log trên server thay vào đó
+    res.status(500).json({ message: 'Lỗi GA4' });
+  }
 };
