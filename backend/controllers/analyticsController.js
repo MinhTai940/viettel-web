@@ -1,6 +1,7 @@
 // backend/controllers/analyticsController.js
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const path = require('path');
+const fs = require('fs');
 
 const propertyId = process.env.GA_PROPERTY_ID;
 
@@ -65,4 +66,21 @@ exports.getVisitorStats = async (req, res) => {
     }
     res.status(500).json({ message: 'Lỗi GA4' });
   }
+};
+
+// Debug endpoint (only when DEBUG_GA=true)
+exports.getDebug = async (req, res) => {
+  if (process.env.DEBUG_GA !== 'true') {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+
+  const keyPath = path.join(__dirname, '..', 'ga-key.json');
+  const hasKeyFile = fs.existsSync(keyPath);
+
+  return res.status(200).json({
+    propertyId: !!process.env.GA_PROPERTY_ID,
+    usingEnvKeyJson: !!process.env.GA_KEY_JSON,
+    hasKeyFile,
+    clientInitialized: !!analyticsDataClient,
+  });
 };
