@@ -16,6 +16,7 @@ const internetOrderRoutes = require("./routes/internetOrderRoutes")
 const contactRoutes = require("./routes/contactRoutes")
 const analyticsRoutes = require('./routes/analyticsRoute');
 const adminRoutes = require('./routes/adminRoute');
+const cors = require('cors');
 
 const app = express()
 
