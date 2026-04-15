@@ -42,7 +42,10 @@ exports.getPackages = async (req, res) => {
 // =============================
 exports.getPackageById = async (req, res) => {
     try {
+        // 1. TĂNG LƯỢT XEM: Cứ mỗi lần hàm này được gọi, views sẽ tự tăng thêm 1
+        await Package.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
 
+        // 2. LẤY DỮ LIỆU: Vẫn giữ nguyên logic cũ của mày
         const pkg = await Package
             .findById(req.params.id)
             .populate("category")
@@ -63,7 +66,6 @@ exports.getPackageById = async (req, res) => {
         })
     }
 }
-
 
 // =============================
 // CREATE PACKAGE
